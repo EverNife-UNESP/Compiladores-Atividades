@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="463.0" prefWidth="646.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.atividade1.CalculadoraController">
+   <center>
+      <AnchorPane prefHeight="444.0" prefWidth="646.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="241.0" layoutY="19.0" text="Insira a Expressão matemática!" />
+            <TextField fx:id="analiseLexicaInput" layoutX="193.0" layoutY="54.0" prefHeight="25.0" prefWidth="257.0" />
+            <Button layoutX="253.0" layoutY="98.0" mnemonicParsing="false" onAction="#onAnaliseLexica" text="Realizar Análise Léxica!" />
+            <Button layoutX="535.0" layoutY="98.0" mnemonicParsing="false" onAction="#onLerArquivo" opacity="0.91" prefHeight="25.0" prefWidth="97.0" text="Ler Aqruivo" textFill="#977171" />
+            <Label layoutX="479.0" layoutY="123.0" text="Ler expressão de um arquivo" />
+            <TableView fx:id="tabela" editable="true" layoutX="22.0" layoutY="157.0" prefHeight="292.0" prefWidth="603.0">
+              <columns>
+                <TableColumn fx:id="columnExpressao" editable="false" prefWidth="199.0" sortable="false" text="Expressão" />
+                <TableColumn fx:id="columnTipoLexema" editable="false" prefWidth="198.0" sortable="false" text="Tipo do Lexema" />
+                  <TableColumn fx:id="columnInicio" editable="false" prefWidth="102.0" sortable="false" text="Inicio" />
+                  <TableColumn fx:id="columnFim" editable="false" prefWidth="103.0" sortable="false" text="Fim" />
+              </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

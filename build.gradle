@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        jcenter()
+        flatDir {
+            dirs 'libs'
+        }
+    }
+    dependencies {
+        //classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'drawings-gradle-plugin', version: '8.8.2'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+//apply plugin: 'drawings-gradle-plugin'
+
+group 'br.com.finalcraft'
+version '1.0.1a'
+
+sourceCompatibility = 1.8
+
+compileJava.options.encoding = 'UTF-8'
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.jfoenix:jfoenix:8.0.8' // Java 8
+}
+
+shadowJar {
+    dependencies {
+        exclude(dependency('shadow:d:1.0'))
+    }
+    archiveName = "${baseName}-${version}.jar"
+    manifest {
+        attributes 'Main-Class': 'br.com.finalcraft.unesp.compiladores.atividades.JavaFXMain'
+    }
+}
+
+build.dependsOn(shadowJar);
+jar.enabled = false
