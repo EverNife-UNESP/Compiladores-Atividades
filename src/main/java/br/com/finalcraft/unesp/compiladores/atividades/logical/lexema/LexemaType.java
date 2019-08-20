@@ -5,13 +5,19 @@ import java.util.regex.Pattern;
 public enum LexemaType {
     BRANCO("[\n| |\t|\r]"),
     IDENTIFICADOR("[_|a-z|A-Z][a-z|A-Z|0-9|_]*"),
-    INTEIRO("0|[1-9][0-9]*"),
-    DOUBLE("(0|([1-9][0-9]*))(\\.[0-9]+)?$"),
+    INTEIRO("0|[1-9][0-9]{0,19}"),
+    DOUBLE("(0|([1-9][0-9]{0,19}))(\\.[0-9]{1,20})?$"),
 
     SOMA(Pattern.quote("+")),
     SUBTRACAO(Pattern.quote("-")),
     MULTIPLICACAO(Pattern.quote("*")),
     DIVISAO(Pattern.quote("/")),
+
+    ABRE_PARENTESES(Pattern.quote("(")),
+    FECHA_PARENTESES(Pattern.quote(")")),
+    VIRGULA(Pattern.quote(",")),
+    PONT_E_VIRGULA(Pattern.quote(";")),
+    DOIS_PONTOS(Pattern.quote(":")),
 
     DESCONHECIDO(Pattern.quote(""));
 
@@ -32,5 +38,14 @@ public enum LexemaType {
             }
         }
         return LexemaType.DESCONHECIDO;
+    }
+
+    public static boolean isUnichicharacterSymbol(String theEpression){
+        if (theEpression.matches(SOMA.getRegex())) return true;
+        if (theEpression.matches(SUBTRACAO.getRegex())) return true;
+        if (theEpression.matches(MULTIPLICACAO.getRegex())) return true;
+        if (theEpression.matches(DIVISAO.getRegex())) return true;
+
+        return false;
     }
 }

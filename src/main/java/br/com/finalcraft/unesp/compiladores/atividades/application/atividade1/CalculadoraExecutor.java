@@ -17,10 +17,13 @@ public class CalculadoraExecutor {
         int wordStart = 0;
         StringBuilder stringBuilder = new StringBuilder();
         for (int index = 0; index < charArray.length; index++) {
-            if (String.valueOf(charArray[index]).matches(LexemaType.BRANCO.getRegex())){
-                if (foundWord == true){
-                    foundWord = false;
-                    foundLexemas.add(new Lexema(stringBuilder.toString(), wordStart, index - 1));
+            String charAtIndex = String.valueOf(charArray[index]);
+            boolean isUnicharacterSymbol = LexemaType.isUnichicharacterSymbol(charAtIndex);
+            if (foundWord == true && (charAtIndex.matches(LexemaType.BRANCO.getRegex()) || isUnicharacterSymbol) ){
+                foundWord = false;
+                foundLexemas.add(new Lexema(stringBuilder.toString(), wordStart, index - 1));
+                if (isUnicharacterSymbol){
+                    foundLexemas.add(new Lexema(charAtIndex, index, index));
                 }
                 continue;
             }
