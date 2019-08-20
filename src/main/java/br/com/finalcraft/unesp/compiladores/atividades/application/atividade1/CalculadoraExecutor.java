@@ -16,19 +16,42 @@ public class CalculadoraExecutor {
         boolean foundWord = false;
         int wordStart = 0;
         StringBuilder stringBuilder = new StringBuilder();
-        for (int index = 0; index < charArray.length; index++) {
+        int contadorLinha = 0;
+        int contadorColuna = 0;
+        for (int index = 0; index < charArray.length; index++, contadorColuna++) {
             String charAtIndex = String.valueOf(charArray[index]);
             boolean isUnicharacterSymbol = LexemaType.isUnichicharacterSymbol(charAtIndex);
+
+            if (isUnicharacterSymbol && foundWord == false){
+                foundLexemas.add(new Lexema(charAtIndex, contadorLinha, contadorColuna, contadorColuna));
+                continue;
+            }
+
             if (foundWord == true && (charAtIndex.matches(LexemaType.BRANCO.getRegex()) || isUnicharacterSymbol) ){
+                if (charArray[index] == '\n'){
+                    contadorLinha++;
+                    contadorColuna = 0;
+                }
                 foundWord = false;
-                foundLexemas.add(new Lexema(stringBuilder.toString(), wordStart, index - 1));
+                foundLexemas.add(new Lexema(stringBuilder.toString(), contadorLinha, wordStart, contadorColuna - 1));
                 if (isUnicharacterSymbol){
-                    foundLexemas.add(new Lexema(charAtIndex, index, index));
+                    if (index+1 < charArray.length){//Se nao for o final do arquivo!
+                        String nextChar = String.valueOf(charArray[index + 1]);
+                        String possibelSymbol = charAtIndex + nextChar;
+                        //System.out.println("Next Double Possible: " + possibelSymbol);
+                        if (LexemaType.isDoubleCharacterSymbol(possibelSymbol)){
+                            foundLexemas.add(new Lexema(possibelSymbol, contadorLinha, contadorColuna, contadorColuna + 1));
+                            index++;
+                            contadorColuna++;
+                            continue;
+                        }
+                    }
+                    foundLexemas.add(new Lexema(charAtIndex, contadorLinha, contadorColuna, contadorColuna));
                 }
                 continue;
             }
             if (foundWord == false){
-                wordStart = index;
+                wordStart = contadorColuna;
                 foundWord = true;
                 stringBuilder = new StringBuilder();
             }

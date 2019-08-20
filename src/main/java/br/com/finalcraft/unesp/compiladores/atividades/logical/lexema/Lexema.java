@@ -4,12 +4,14 @@ public class Lexema {
 
     private String theExpression;
     private LexemaType lexemaType;
+    private int linha;
     private int start;
     private int end;
 
-    public Lexema(String theExpression, int start, int end) {
+    public Lexema(String theExpression, int linha, int start, int end) {
         this.theExpression = theExpression;
         this.lexemaType = LexemaType.getOf(theExpression);
+        this.linha = linha;
         this.start = start;
         this.end = end;
     }
@@ -28,6 +30,10 @@ public class Lexema {
 
     public int getEnd() {
         return end;
+    }
+
+    public int getLinha() {
+        return linha;
     }
 
     @Override
