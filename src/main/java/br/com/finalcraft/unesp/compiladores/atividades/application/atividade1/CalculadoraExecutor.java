@@ -23,30 +23,39 @@ public class CalculadoraExecutor {
             boolean isUnicharacterSymbol = LexemaType.isUnichicharacterSymbol(charAtIndex);
 
             if (isUnicharacterSymbol && foundWord == false){
+                String charAtNextIndex = String.valueOf(charArray[index + 1]);
+                String possibelSymbol = charAtIndex + charAtNextIndex;
+                if (LexemaType.isDoubleCharacterSymbol(possibelSymbol)){
+                    foundLexemas.add(new Lexema(possibelSymbol, contadorLinha, contadorColuna, contadorColuna + 1));
+                    index++;
+                    contadorColuna++;
+                    continue;
+                }
                 foundLexemas.add(new Lexema(charAtIndex, contadorLinha, contadorColuna, contadorColuna));
                 continue;
             }
 
-            if (foundWord == true && (charAtIndex.matches(LexemaType.BRANCO.getRegex()) || isUnicharacterSymbol) ){
-                if (charArray[index] == '\n'){
-                    contadorLinha++;
-                    contadorColuna = 0;
-                }
-                foundWord = false;
-                foundLexemas.add(new Lexema(stringBuilder.toString(), contadorLinha, wordStart, contadorColuna - 1));
-                if (isUnicharacterSymbol){
-                    if (index+1 < charArray.length){//Se nao for o final do arquivo!
-                        String nextChar = String.valueOf(charArray[index + 1]);
-                        String possibelSymbol = charAtIndex + nextChar;
-                        //System.out.println("Next Double Possible: " + possibelSymbol);
-                        if (LexemaType.isDoubleCharacterSymbol(possibelSymbol)){
-                            foundLexemas.add(new Lexema(possibelSymbol, contadorLinha, contadorColuna, contadorColuna + 1));
-                            index++;
-                            contadorColuna++;
-                            continue;
-                        }
+            if (charAtIndex.matches(LexemaType.BRANCO.getRegex()) || isUnicharacterSymbol ){
+                if (foundWord == true){
+                    if (charArray[index] == '\n'){
+                        contadorLinha++;
+                        contadorColuna = 0;
                     }
-                    foundLexemas.add(new Lexema(charAtIndex, contadorLinha, contadorColuna, contadorColuna));
+                    foundWord = false;
+                    foundLexemas.add(new Lexema(stringBuilder.toString(), contadorLinha, wordStart, contadorColuna - 1));
+                    if (isUnicharacterSymbol){
+                        if (index+1 < charArray.length){//Se nao for o final do arquivo!
+                            String charAtNextIndex = String.valueOf(charArray[index + 1]);
+                            String possibelSymbol = charAtIndex + charAtNextIndex;
+                            if (LexemaType.isDoubleCharacterSymbol(possibelSymbol)){
+                                foundLexemas.add(new Lexema(possibelSymbol, contadorLinha, contadorColuna, contadorColuna + 1));
+                                index++;
+                                contadorColuna++;
+                                continue;
+                            }
+                        }
+                        foundLexemas.add(new Lexema(charAtIndex, contadorLinha, contadorColuna, contadorColuna));
+                    }
                 }
                 continue;
             }
@@ -55,7 +64,7 @@ public class CalculadoraExecutor {
                 foundWord = true;
                 stringBuilder = new StringBuilder();
             }
-            stringBuilder.append(charArray[index]);
+            stringBuilder.append(charAtIndex);
         }
 
         foundLexemas.forEach(System.out::println);
