@@ -8,6 +8,11 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="br.com.finalcraft.Compiladores-Atividades.main" />
     <orderEntry type="library" name="Gradle: com.jfoenix:jfoenix:8.0.8" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.FXMisc:RichTextFX:v0.10.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.fxmisc.undo:undofx:2.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.fxmisc.flowless:flowless:0.6" level="project" />
+    <orderEntry type="library" name="Gradle: org.reactfx:reactfx:2.0-M5" level="project" />
+    <orderEntry type="library" name="Gradle: org.fxmisc.wellbehaved:wellbehavedfx:0.3.3" level="project" />
   </component>
   <component name="TestModuleProperties" production-module="br.com.finalcraft.Compiladores-Atividades.main" />
 </module>

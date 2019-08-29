@@ -1,4 +1,4 @@
-package br.com.finalcraft.unesp.compiladores.atividades.application.atividade1;
+package br.com.finalcraft.unesp.compiladores.atividades.application;
 
 
 import br.com.finalcraft.unesp.compiladores.atividades.logical.lexema.Lexema;
@@ -7,9 +7,9 @@ import br.com.finalcraft.unesp.compiladores.atividades.logical.lexema.LexemaType
 import java.util.ArrayList;
 import java.util.List;
 
-public class CalculadoraExecutor {
+public class AnalisadorLexico {
 
-    public static List<Lexema> analiseLexical(String theValue){
+    public static List<Lexema> analiseLexica(String theValue){
         List<Lexema> foundLexemas = new ArrayList<>();
 
         char[] charArray = (theValue + ' ').toCharArray();  //Fix for not checking the last word

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.FXMisc:RichTextFX:v0.10.1">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/Could not find com.github.FXMisc:RichTextFX:v0.10.1." />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.FXMisc/RichTextFX/v0.10.1/4d1db8bbbf0165b4625cd59d17f7e2135c054829/RichTextFX-v0.10.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.FXMisc/RichTextFX/v0.10.1/6d6cab64d0519d0f8fe0224c8c47f7421fdf2654/RichTextFX-v0.10.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

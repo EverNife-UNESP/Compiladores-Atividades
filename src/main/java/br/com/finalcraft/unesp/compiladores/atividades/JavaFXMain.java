@@ -1,10 +1,9 @@
 package br.com.finalcraft.unesp.compiladores.atividades;
 
-import br.com.finalcraft.unesp.compiladores.atividades.application.atividade1.CalculadoraExecutor;
+import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analisadorlexico.AnalisadorLexicoController;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.atividade1.CalculadoraController;
-import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.filemanager.LoaderController;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.view.MyFXMLs;
-import br.com.finalcraft.unesp.compiladores.atividades.logical.lexema.Lexema;
+import br.com.finalcraft.unesp.compiladores.atividades.javafx.view.imported.PascalKeywordsAsync;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -12,8 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-
-import java.util.List;
 
 public class JavaFXMain extends Application {
 
@@ -34,8 +31,12 @@ public class JavaFXMain extends Application {
         initRootLayout();
 
         //Iniciando todos as abas para deixar no grau!
+        PascalKeywordsAsync.setUp();    //Code TextArea
+
+
         CalculadoraController.setUp();
-        LoaderController.setUp();
+        AnalisadorLexicoController.setUp();
+
     }
 
     public void initRootLayout()  throws Exception{

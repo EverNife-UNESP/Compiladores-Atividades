@@ -7,12 +7,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="282.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.MainController">
    <center>
       <VBox prefHeight="289.0" prefWidth="282.0" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onAction="#onCalculadoraAnaliseLexica" prefHeight="66.0" prefWidth="615.0" text="Calculadora - Análise Léxica" />
+            <Button mnemonicParsing="false" onAction="#onAnalisadorLexicoDeCodigo" prefHeight="66.0" prefWidth="615.0" text="Análisador Léxica de Código" />
          </children>
       </VBox>
    </center>

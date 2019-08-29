@@ -1,5 +1,6 @@
 package br.com.finalcraft.unesp.compiladores.atividades.javafx.controller;
 
+import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analisadorlexico.AnalisadorLexicoController;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.atividade1.CalculadoraController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,4 +19,8 @@ public class MainController {
         CalculadoraController.show();
     }
 
+    @FXML
+    void onAnalisadorLexicoDeCodigo(){
+        AnalisadorLexicoController.show();
+    }
 }
