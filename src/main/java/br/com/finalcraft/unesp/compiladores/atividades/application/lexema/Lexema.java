@@ -1,9 +1,9 @@
-package br.com.finalcraft.unesp.compiladores.atividades.logical.lexema;
+package br.com.finalcraft.unesp.compiladores.atividades.application.lexema;
 
 public class Lexema {
 
     private String theExpression;
-    private LexemaType lexemaType;
+    private LexemaTypeEnum lexemaType;
     private int linha;
     private int start;
     private int end;
@@ -20,7 +20,7 @@ public class Lexema {
         return theExpression;
     }
 
-    public LexemaType getLexemaType() {
+    public LexemaTypeEnum getLexemaType() {
         return lexemaType;
     }
 

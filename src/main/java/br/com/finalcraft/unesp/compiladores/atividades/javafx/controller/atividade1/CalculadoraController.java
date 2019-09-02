@@ -4,7 +4,7 @@ import br.com.finalcraft.unesp.compiladores.atividades.JavaFXMain;
 import br.com.finalcraft.unesp.compiladores.atividades.application.AnalisadorLexico;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.filemanager.FileLoaderHandler;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.view.MyFXMLs;
-import br.com.finalcraft.unesp.compiladores.atividades.logical.lexema.Lexema;
+import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.Lexema;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

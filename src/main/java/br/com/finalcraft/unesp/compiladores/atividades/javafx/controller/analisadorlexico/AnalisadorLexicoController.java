@@ -5,7 +5,7 @@ import br.com.finalcraft.unesp.compiladores.atividades.application.AnalisadorLex
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.filemanager.FileLoaderHandler;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.view.MyFXMLs;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.view.imported.PascalKeywordsAsync;
-import br.com.finalcraft.unesp.compiladores.atividades.logical.lexema.Lexema;
+import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.Lexema;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -93,7 +93,6 @@ public class AnalisadorLexicoController implements FileLoaderHandler{
     void onAnaliseLexica() {
 
         CodeArea codeArea = PascalKeywordsAsync.getCodeArea();
-        System.out.println(codeArea.getText());
         if (!codeArea.getText().isEmpty()){
             lexemaObservableList = FXCollections.observableList(AnalisadorLexico.analiseLexica(codeArea.getText()));
             tabela.setItems(lexemaObservableList);
