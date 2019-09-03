@@ -8,9 +8,9 @@ import java.util.regex.Pattern;
 public enum LexemaType implements LexemaTypeEnum{
     BRANCO("[\n| |\t|\r]"),
 
-    IDENTIFICADOR("[_|a-z|A-Z][a-z|A-Z|0-9|_]{0,20}"), //20
-    INTEIRO("0|[1-9][0-9]{0,5}"),  //6
-    DOUBLE("(0|([1-9][0-9]{0,5}))(\\.[0-9]{1,5})?$"), //6.6 Double
+    IDENTIFICADOR("[_|a-z|A-Z][a-z|A-Z|0-9|_]*"),
+    INTEIRO("0|[1-9][0-9]*"),
+    DOUBLE("(0|([1-9][0-9]*))(\\.[0-9]*)?$"),
 
     SOMA(Pattern.quote("+")),
     SUBTRACAO(Pattern.quote("-")),
@@ -52,13 +52,10 @@ public enum LexemaType implements LexemaTypeEnum{
 
         if (theLexema == LexemaType.IDENTIFICADOR){ //Caso seja um identificado, verificar se ele não é uma palavra reservada
             theLexema = Reservada.getOf(stringToCheck);
-            return theLexema != null ? theLexema : LexemaType.IDENTIFICADOR;
+            if (theLexema == null) theLexema = LexemaType.IDENTIFICADOR;
         }
 
-        if (theLexema == LexemaType.DESCONHECIDO){  //Caso seja um desconhecido, verificar se ele não é um erro
-            theLexema = Error.getOf(stringToCheck);
-            return theLexema != null ? theLexema : LexemaType.DESCONHECIDO;
-        }
+        theLexema = Error.checkForErrors(stringToCheck,theLexema);
 
         return theLexema;
     }
@@ -87,11 +84,15 @@ public enum LexemaType implements LexemaTypeEnum{
         return false;
     }
 
+    @Override
+    public String getLexemaName() {
+        return name();
+    }
+
     public static enum Error implements LexemaTypeEnum{
-        INTEIRO_OVERSIZE("0|[1-9][0-9]{6,}"),  //6
-        DOUBLE_OVERSIZE_BEFORE_ONLY("(0|([1-9][0-9]{6,}))(\\.[0-9]{6,})?$"), //6.6 Double
-        DOUBLE_OVERSIZE_AFTER_ONLY("(0|([1-9][0-9]{6,}))(\\.[0-9]{6,})?$"), //6.6 Double
-        DOUBLE_OVERSIZE("(0|([1-9][0-9]{6,}))(\\.[0-9]{6,})?$"), //6.6 Double
+        INTEIRO_OVERSIZE(""),  //Inteiro com mais de 6 digitos
+        DOUBLE_OVERSIZE(""), //6.6 Double (mais de 6 digitos antes ou depois do .
+        IDENTIFICADOR_OVERSIZE(""); //Mais de 20 caracteres
 
         ;
         String regex;
@@ -104,6 +105,21 @@ public enum LexemaType implements LexemaTypeEnum{
             return regex;
         }
 
+        public static LexemaTypeEnum checkForErrors(String stringToCheck, LexemaTypeEnum currentLexema){
+            if (currentLexema == LexemaType.INTEIRO){
+                return  stringToCheck.length() > 6 ? Error.INTEIRO_OVERSIZE : currentLexema;
+            }
+            if (currentLexema == LexemaType.DOUBLE){
+                String[] parts = stringToCheck.split(Pattern.quote("."));
+                boolean oversize = (parts[0].length() > 6 || parts[1].length() > 6);
+                return  oversize ? Error.DOUBLE_OVERSIZE : currentLexema;
+            }
+            if (currentLexema == LexemaType.IDENTIFICADOR){
+                return  stringToCheck.length() > 20 ? IDENTIFICADOR_OVERSIZE : currentLexema;
+            }
+            return currentLexema;
+        }
+
         public static LexemaTypeEnum getOf(String stringToCheck){
             for (LexemaType.Error lexemaError : LexemaType.Error.values()){
                 if (stringToCheck.matches(lexemaError.getRegex())){
@@ -111,6 +127,11 @@ public enum LexemaType implements LexemaTypeEnum{
                 }
             }
             return null;
+        }
+
+        @Override
+        public String getLexemaName() {
+            return name();
         }
     }
 
@@ -152,6 +173,11 @@ public enum LexemaType implements LexemaTypeEnum{
         @Override
         public String toString() {
             return "RESERVADA_"+super.toString();
+        }
+
+        @Override
+        public String getLexemaName() {
+            return name();
         }
     }
 }

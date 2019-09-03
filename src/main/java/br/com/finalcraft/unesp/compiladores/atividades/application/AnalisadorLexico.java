@@ -28,8 +28,8 @@ public class AnalisadorLexico {
             if (isUnicharacterSymbol
                     && foundWord == true
                     && LexemaType.getOf(charAtIndex) == LexemaType.PONTO
-                    && LexemaType.getOf(charAtNextIndex) == LexemaType.INTEIRO
-                    && LexemaType.getOf(stringBuilder.toString()) == LexemaType.INTEIRO){
+                    && LexemaType.getOf(charAtNextIndex).getLexemaName().startsWith("INTEIRO")
+                    && LexemaType.getOf(stringBuilder.toString()).getLexemaName().startsWith("INTEIRO")){
                 stringBuilder.append(charAtIndex);
                 System.out.println("GetOut");
                 continue;
