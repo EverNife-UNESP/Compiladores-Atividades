@@ -3,6 +3,7 @@ package br.com.finalcraft.unesp.compiladores.atividades.application;
 
 import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.Lexema;
 import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.LexemaType;
+import br.com.finalcraft.unesp.compiladores.atividades.javafx.view.imported.PascalKeywordsAsync;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,14 @@ import java.util.List;
 public class AnalisadorLexico {
 
     public static List<Lexema> analiseLexica(String theValue){
+
+        //Aplica um replace usando a regex de comentário para limpar o texto.
+        theValue = theValue.replaceAll(PascalKeywordsAsync.COMMENT_PATTERN,"");
+
+
         List<Lexema> foundLexemas = new ArrayList<>();
 
-        char[] charArray = (theValue + ' ' + ' ').toCharArray();  //Fix for not checking the last word
+        char[] charArray = (theValue + ' ' + ' ' ).toCharArray();  //Fix for not checking the last word
         boolean foundWord = false;
         int wordStart = 0;
         StringBuilder stringBuilder = new StringBuilder();
@@ -25,13 +31,13 @@ public class AnalisadorLexico {
             String charAtNextIndex = String.valueOf(charArray[index + 1]);
             String possibelSymbol = charAtIndex + charAtNextIndex;
 
+            //Tratamento do ponto entre duas sequencias numéricas!
             if (isUnicharacterSymbol
                     && foundWord == true
                     && LexemaType.getOf(charAtIndex) == LexemaType.PONTO
                     && LexemaType.getOf(charAtNextIndex).getLexemaName().startsWith("INTEIRO")
                     && LexemaType.getOf(stringBuilder.toString()).getLexemaName().startsWith("INTEIRO")){
                 stringBuilder.append(charAtIndex);
-                System.out.println("GetOut");
                 continue;
             }
 
