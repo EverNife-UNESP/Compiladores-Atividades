@@ -1,6 +1,8 @@
 package br.com.finalcraft.unesp.compiladores.atividades;
 
-import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analisadorlexico.AnalisadorLexicoController;
+import br.com.finalcraft.unesp.compiladores.atividades.application.AnalisadorSintatico;
+import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analisadores.AnalisadorLexicoController;
+import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analisadores.AnalisadorSintaticoController;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.atividade1.CalculadoraController;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.view.MyFXMLs;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.view.imported.PascalKeywordsAsync;
@@ -36,6 +38,7 @@ public class JavaFXMain extends Application {
 
         CalculadoraController.setUp();
         AnalisadorLexicoController.setUp();
+        AnalisadorSintaticoController.setUp();
 
     }
 

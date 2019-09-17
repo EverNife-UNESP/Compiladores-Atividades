@@ -12,6 +12,7 @@ public class MyFXMLs {
     //Atividades
     public static Parent calculadora;
     public static Parent analisador_lexico;
+    public static Parent analisador_sintatico;
 
 
     //Arquivos
@@ -23,6 +24,7 @@ public class MyFXMLs {
 
         calculadora = FXMLLoader.load(MyFXMLs.class.getResource("/assets/atividade1/calculadora.fxml"));
         analisador_lexico = FXMLLoader.load(MyFXMLs.class.getResource("/assets/atividade2/analisador_lexico.fxml"));
+        analisador_sintatico = FXMLLoader.load(MyFXMLs.class.getResource("/assets/atividade2/analisador_sintatico.fxml"));
 
         //save_to_file = FXMLLoader.load(MyFXMLs.class.getResource("/assets/file/save_to_file.fxml"));
     }

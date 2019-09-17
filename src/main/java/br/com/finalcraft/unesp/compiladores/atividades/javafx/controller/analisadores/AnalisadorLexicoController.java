@@ -1,4 +1,4 @@
-package br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analisadorlexico;
+package br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analisadores;
 
 import br.com.finalcraft.unesp.compiladores.atividades.JavaFXMain;
 import br.com.finalcraft.unesp.compiladores.atividades.application.AnalisadorLexico;

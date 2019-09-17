@@ -38,6 +38,6 @@ public class Lexema {
 
     @Override
     public String toString() {
-        return "[Start:" + start + "][End:" + end + "]     " + theExpression + "  ⇨ " + lexemaType;
+        return "[start:" + start + ", end:" + end + ", expression:\'" + theExpression + "\',  lexemaType:" + lexemaType + "]";
     }
 }
