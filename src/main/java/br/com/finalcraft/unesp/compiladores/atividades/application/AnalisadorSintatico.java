@@ -28,7 +28,7 @@ public class AnalisadorSintatico {
         index = 0;
 
         System.out.println("\n\nIniciando analise sintática (" + lexemas.size() + " lexemas encontrados)\n\n");
-        checkGrammmar(Grammar.PROGRAM);
+        checkGrammmar(Grammar.getOrCreateGrammar(new NaoTerminal("<programa>")));
     }
 
 
@@ -60,7 +60,7 @@ public class AnalisadorSintatico {
             boolean forceNextCheck = false;
             for (Derivacao derivation : derivacaoList) {
 
-                System.out.println("\n        CurrentDerivation \'" + derivation + "\'");
+                System.out.println("\n        CurrentDerivation [" + grammar.getOrigem() + "] \'" + derivation + "\'");
 
                 if (derivation instanceof Terminal){
                     final Lexema currentLexema = getCurrentLexema();
@@ -73,7 +73,7 @@ public class AnalisadorSintatico {
                     System.out.println("            CurrenteLexema is Terminal: " + currentLexema);
                     if (currentLexema.getLexemaType() != terminalDerivation.getLexemaType()){
                         System.out.println("                ✖✖✖✖ Fail to match, backtracking!");
-                        grammarErrorList.add(new GrammarError(currentLexema,currentLexema.getLexemaType()));
+                        grammarErrorList.add(new GrammarError(currentLexema,terminalDerivation.getLexemaType()));
                         forceNextCheck = true;
                         break;
                     }
@@ -83,7 +83,6 @@ public class AnalisadorSintatico {
                     System.out.println("            NonTherminalDerivation [ " + nonTerminalDerivation + " ], here we go again!");
                     List<GrammarError> innerErrors = checkGrammmar(nonTerminalDerivation.getOwnGrammar());
                     if (innerErrors.size() > 0){
-                        grammarErrorList = innerErrors;
                         forceNextCheck = true;
                         break;
                     }
@@ -92,10 +91,15 @@ public class AnalisadorSintatico {
             checkNextList = forceNextCheck;
         }
 
-        System.out.println("\n");
-        for (GrammarError grammarError : grammarErrorList) {
-            System.out.println(grammarError);
+        if (grammarErrorList.size() > 0){
+            System.out.println("\n");
+            for (GrammarError grammarError : grammarErrorList) {
+                System.out.println(grammarError);
+            }
+        }else {
+            System.out.println("Nenhum erro encontrado na gramatica: " + grammar.getOrigem());
         }
+
 
         return grammarErrorList;
     }

@@ -13,7 +13,7 @@
          <children>
             <Button mnemonicParsing="false" onAction="#onCalculadoraAnaliseLexica" prefHeight="66.0" prefWidth="615.0" text="Calculadora - Análise Léxica" />
             <Button mnemonicParsing="false" onAction="#onAnalisadorLexico" prefHeight="66.0" prefWidth="615.0" text="Análisador Léxica de Código" />
-            <Button mnemonicParsing="false" onAction="#onAnalisadorSintatico" prefHeight="66.0" prefWidth="615.0" text="Análisador Léxica de Código" />
+            <Button mnemonicParsing="false" onAction="#onAnalisadorSintatico" prefHeight="66.0" prefWidth="615.0" text="Análisador Sintático de Código" />
          </children>
       </VBox>
    </center>

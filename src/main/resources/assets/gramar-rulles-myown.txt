@@ -1,0 +1,211 @@
+☢1.0		<programa> ::=
+				program <identificador>
+				;
+				<bloco>
+			//	.
+
+
+☢2.0		<bloco> ::=
+				<parte_de_declarações_de_variáveis>
+				<parte_de_declarações_de_subrotinas>
+				<comando_composto>
+
+
+☢3.0		<parte_de_declarações_de_variáveis> ::=
+			<declaração_de_variáveis>
+			;
+			<parte_de_declarações_de_variáveis>
+
+☢3.0		<parte_de_declarações_de_variáveis> ::=
+			VAZIO
+
+
+☢4.0		<declaração_de_variáveis> ::=
+			<tipo>
+			<lista_de_identificadores>
+
+
+☢5.0		<lista_de_identificadores> ::=
+			<identificador>
+			,
+			<lista_de_identificadores>
+
+☢5.0		<lista_de_identificadores> ::=
+			<identificador>
+
+
+☢6.0		<parte_de_declarações_de_subrotinas> ::=
+			<declaração_de_procedimento>
+			;
+			<parte_de_declarações_de_subrotinas>
+
+☢6.0		<parte_de_declarações_de_subrotinas> ::=
+			VAZIO
+
+
+☢7.0		<declaração_de_procedimento> ::=
+			procedure
+			<identificador>
+			<parâmetros_formais>
+			;
+			<bloco>
+
+
+☢8.0		<parâmetros_formais> ::=
+			(
+			<seção_de_parâmetros_formais>
+			)
+
+
+☢9.0		<seção_de_parâmetros_formais> ::=
+			var
+			<lista_de_identificadores>
+			:
+			<identificador>
+☢9.0		<seção_de_parâmetros_formais> ::=
+			var
+			<lista_de_identificadores>
+			:
+			<identificador>
+			;
+			<seção_de_parâmetros_formais>
+
+
+☢9.5		<possible_var> ::=
+			var
+☢9.5		<possible_var> ::=
+			VAZIO
+
+
+☢10.0	<comando_composto> ::=
+			begin
+			<comando>
+			<comando_composto_interior>
+			end
+
+
+☢10.5	<comando_composto_interior> ::=
+			;
+			<comando>
+			<comando_composto_interior>
+
+☢10.5	<comando_composto_interior> ::=
+			VAZIO
+
+
+☢11.0	<comando> ::= <atribuição>
+☢11.0	<comando> ::= <chamada_de_procedimento>
+☢11.0	<comando> ::= <comando_composto>
+☢11.0	<comando> ::= <comando_condicional_um>
+☢11.0	<comando> ::= <comando_repetitivo_um>
+
+
+☢12.0	<atribuição> ::=
+			<variável> m:= <expressão>
+
+
+☢13.0	<chamada_de_procedimento> ::=
+			<identificador> ( <lista_de_expressões> )
+
+☢13.0	<chamada_de_procedimento> ::=
+			<identificador>
+
+
+☢14.0	<comando_condicional_um> ::=
+			if <expressão> then <comando> else <comando>
+☢14.0	<comando_condicional_um> ::=
+			if <expressão> then <comando>
+
+☢15.0	<comando_repetitivo_um> ::=
+			while <expressão> do <comando>
+
+
+☢16.0	<expressão> ::=
+			<expressão_simples> <relação> <expressão_simples>
+
+☢16.0	<expressão> ::=
+			<expressão_simples>
+
+
+☢17.0	<relação> ::= =
+☢17.0	<relação> ::= <>
+☢17.0	<relação> ::= <
+☢17.0	<relação> ::= <=
+☢17.0	<relação> ::= >=
+☢17.0	<relação> ::= >
+
+
+☢18.0	<expressão_simples> ::=
+			<mais_ou_menos>
+			<termo>
+			<termo_opcional>
+
+☢18.5	<mais_ou_menos> ::= +
+☢18.5	<mais_ou_menos> ::= -
+
+☢18.5	<termo_opcional> ::=
+			<mais_ou_menos_ou_or>
+			<termo>
+☢18.5	<termo_opcional> ::=
+			VAZIO
+
+☢18.5	<mais_ou_menos_ou_or> ::= +
+☢18.5	<mais_ou_menos_ou_or> ::= -
+☢18.5	<mais_ou_menos_ou_or> ::= or			//Isso_aqui_ta_certo_produção?
+
+
+☢19.0	<termo> ::= <fator> <outro_fator>
+
+☢19.5	<outro_fator> ::= <vezes_ou_dividir_ou_and> <fator> <outro_fator>
+☢19.5	<outro_fator> ::= VAZIO
+
+☢19.5	<vezes_ou_dividir_ou_and> ::= *
+☢19.5	<vezes_ou_dividir_ou_and> ::= div
+☢19.5	<vezes_ou_dividir_ou_and> ::= and
+
+
+☢20.0	<fator> ::= <variavel>
+☢20.0	<fator> ::= <número>
+☢20.0	<fator> ::= ( <expressão> )
+☢20.0	<fator> ::= not <fator>
+
+
+☢21.0	<variável> ::= <identificador>
+☢21.0	<variável> ::= <identificador> <expressão>
+
+
+☢22.0	<lista_de_expressões> ::= <expressão> <outra_expressão>
+
+☢22.5	<outra_expressão> ::= , <expressão>
+☢22.5	<outra_expressão> ::= VAZIO
+
+☢23 	<tipo> ::= int
+☢23 	<tipo> ::= boolean
+
+
+/*
+Ta_bom_já,_daqui_para_baixo_não_é_utilizado.
+
+<número>_e_<identificador>_são_termináias_já_adicionadis_diretamente_no_programa
+
+
+
+23.0_<número> ::= <dígito> {<dígito>}
+24.0_<dígito> ::= 0_|_1_|_2_|_3_|_4_|_5_|_6_|_7_|_8_|_9
+25.0_<identificador> ::= <letra>_{<letra>_|_<dígito>}
+26.0_<letra> ::= _|_a_-z_|A_-_Z
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+

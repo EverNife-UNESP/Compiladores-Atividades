@@ -5,7 +5,9 @@ import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.Terminal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Grammar {
 
@@ -17,14 +19,14 @@ public class Grammar {
 
     public Grammar(NaoTerminal origem) {
         this.origem = origem;
-        origem.setGrammar(this);
+        mapOfgrammars.put(origem.toString(),this);
     }
 
     public List<List<Derivacao>> getDerivacao2DList() {
         return derivacaoList;
     }
 
-    private Grammar addDerivacao(List<Derivacao> derivacoes){
+    public Grammar addDerivacao(List<Derivacao> derivacoes){
         derivacaoList.add(derivacoes);
         return this;
     }
@@ -33,42 +35,29 @@ public class Grammar {
         return origem;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    // Program
-    // -----------------------------------------------------------------------------------------------------------------
-    public static final Grammar PROGRAM = new Grammar(NaoTerminal.PROGRAM)
-            .addDerivacao(Derivacao.valueOf(new Terminal("program"), new Terminal("identificador"), new Terminal(";"), NaoTerminal.BLOCO, new Terminal(".")));
-
 
     // -----------------------------------------------------------------------------------------------------------------
-    // Bloco
+    // Controller
     // -----------------------------------------------------------------------------------------------------------------
-    public static final Grammar BLOCO = new Grammar(NaoTerminal.BLOCO)
-            .addDerivacao(Derivacao.valueOf(NaoTerminal.PARTE_DE_DECLARACAO_DE_VARIAVEIS,NaoTerminal.PARTE_DE_DECLARACAO_DE_SUB_ROTINAS,NaoTerminal.COMANDO_COMPOSTO));
+    public static Map<String, Grammar> mapOfgrammars = new HashMap<String, Grammar>();
 
+    public static Grammar getOrCreateGrammar(NaoTerminal naoTerminal){
+        Grammar grammar = mapOfgrammars.get(naoTerminal.toString());
+        if (grammar == null){
+            grammar = new Grammar(naoTerminal);
+        }
+        return grammar;
+    }
 
-    // -----------------------------------------------------------------------------------------------------------------
-    // Parte de Declaração de Variáveis
-    // -----------------------------------------------------------------------------------------------------------------
-    public static final Grammar PARTE_DE_DECLARACAO_DE_VARIAVEIS = new Grammar(NaoTerminal.PARTE_DE_DECLARACAO_DE_VARIAVEIS)
-            .addDerivacao(Derivacao.valueOf(NaoTerminal.DECLARACAO_DE_VARIAVEIS, new Terminal(";"),NaoTerminal.PARTE_DE_DECLARACAO_DE_VARIAVEIS))
-            .addDerivacao(Derivacao.valueOf());//Derivação vazia --> Optional
+    static {
+        Grammar GRAMAR_NUMERO = new Grammar(new NaoTerminal("<número>"))
+                .addDerivacao(Derivacao.valueOf(new Terminal("123")))   //Inteiro
+                .addDerivacao(Derivacao.valueOf(new Terminal("1.1")));  //Double
 
+        Grammar IDENTIFICADOR = new Grammar(new NaoTerminal("<identificador>"))
+                .addDerivacao(Derivacao.valueOf(new Terminal("qualquerCoisa")));   //Identificador Qualquer
 
-    // -----------------------------------------------------------------------------------------------------------------
-    // Declaração de Variáveis
-    // -----------------------------------------------------------------------------------------------------------------
-    public static final Grammar DECLARACAO_DE_VARIAVEIS = new Grammar(NaoTerminal.DECLARACAO_DE_VARIAVEIS)
-            .addDerivacao(Derivacao.valueOf(NaoTerminal.TIPO,NaoTerminal.TIPO, new Terminal(";"),NaoTerminal.PARTE_DE_DECLARACAO_DE_VARIAVEIS))
-            .addDerivacao(Derivacao.valueOf());//Derivação vazia --> Optional
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // Parte de Declaração de SubRotinas
-    // -----------------------------------------------------------------------------------------------------------------
-    public static final Grammar PARTE_DE_DECLARACAO_DE_SUB_ROTINAS = new Grammar(NaoTerminal.PARTE_DE_DECLARACAO_DE_SUB_ROTINAS)
-            .addDerivacao(Derivacao.valueOf(NaoTerminal.DECLARACAO_DE_PROCEDIMENTOS,NaoTerminal.PARTE_DE_DECLARACAO_DE_SUB_ROTINAS))
-            .addDerivacao(Derivacao.valueOf());//Derivação vazia --> Optional
-
-
-
+        mapOfgrammars.put(new NaoTerminal("<número>").toString(), GRAMAR_NUMERO);
+        mapOfgrammars.put(new NaoTerminal("<identificador>").toString(), IDENTIFICADOR);
+    }
 }

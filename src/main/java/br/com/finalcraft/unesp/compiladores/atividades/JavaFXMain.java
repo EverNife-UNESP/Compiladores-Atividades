@@ -1,6 +1,7 @@
 package br.com.finalcraft.unesp.compiladores.atividades;
 
 import br.com.finalcraft.unesp.compiladores.atividades.application.AnalisadorSintatico;
+import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.GramaticalImporter;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analisadores.AnalisadorLexicoController;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analisadores.AnalisadorSintaticoController;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.atividade1.CalculadoraController;
@@ -60,6 +61,7 @@ public class JavaFXMain extends Application {
         });
 
         thePrimaryStage.show();
+        GramaticalImporter.importGrammar();
     }
 
 
