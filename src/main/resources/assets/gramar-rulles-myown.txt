@@ -110,7 +110,10 @@
 
 
 ☢13.0	<chamada_de_procedimento> ::=
-			<identificador> ( <lista_de_expressões> )
+			<identificador>
+			(
+			<lista_de_expressões>
+			)
 
 ☢13.0	<chamada_de_procedimento> ::=
 			<identificador>
@@ -175,7 +178,7 @@
 ☢19.5	<vezes_ou_dividir_ou_and> ::= and
 
 
-☢20.0	<fator> ::= <variavel>
+☢20.0	<fator> ::= <variável>
 ☢20.0	<fator> ::= <número>
 ☢20.0	<fator> ::= true
 ☢20.0	<fator> ::= false
@@ -200,7 +203,7 @@
 
 <número>        |
 <identificador> |
-<variavel>      |    -> estes são termináias já adicionadis diretamente no programa devido a sua "natureza dinâmica"
+<variável>      |    -> estes são termináias já adicionadis diretamente no programa devido a sua "natureza dinâmica"
 
 Ta bom já, daqui para baixo não é utilizado.
 

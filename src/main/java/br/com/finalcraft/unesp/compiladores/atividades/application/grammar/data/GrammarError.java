@@ -15,7 +15,7 @@ public class GrammarError{
 
     public GrammarError(Lexema found, LexemaTypeEnum expected, ErrorType errorType) {
         this.lexema = found;
-        this.found = lexema.getLexemaType();
+        this.found = lexema != null ? lexema.getLexemaType() : null;
         this.expected = expected;
         this.errorType = errorType;
         this.grammar = null;
@@ -44,6 +44,25 @@ public class GrammarError{
         }
     }
 
+    public Lexema getLexema() {
+        return lexema;
+    }
+
+    public LexemaTypeEnum getFound() {
+        return found;
+    }
+
+    public LexemaTypeEnum getExpected() {
+        return expected;
+    }
+
+    public ErrorType getErrorType() {
+        return errorType;
+    }
+
+    public Grammar getGrammar() {
+        return grammar;
+    }
 
     public enum ErrorType{
         NO_TERMINAL_MATCH,

@@ -10,7 +10,10 @@ import java.util.List;
 
 public class AnalisadorLexico {
 
+    public static int currentID = 1;
+
     public static List<Lexema> analiseLexica(String theValue){
+        currentID = 0;
 
         //Aplica um replace usando a regex de comentário para limpar o texto.
         theValue = theValue.replaceAll(PascalKeywordsAsync.COMMENT_PATTERN," ");
@@ -54,10 +57,6 @@ public class AnalisadorLexico {
             }
 
             if (charAtIndex.matches(LexemaType.BRANCO.getRegex()) || isUnicharacterSymbol ){
-                if (charArray[index] == '\n'){
-                    contadorLinha++;
-                    contadorColuna = 0;
-                }
                 if (foundWord == true){
                     foundWord = false;
                     foundLexemas.add(new Lexema(stringBuilder.toString(), contadorLinha, wordStart, contadorColuna - 1));
@@ -72,6 +71,10 @@ public class AnalisadorLexico {
                         }
                         foundLexemas.add(new Lexema(charAtIndex, contadorLinha, contadorColuna, contadorColuna));
                     }
+                }
+                if (charArray[index] == '\n'){
+                    contadorLinha++;
+                    contadorColuna = 0;
                 }
                 continue;
             }

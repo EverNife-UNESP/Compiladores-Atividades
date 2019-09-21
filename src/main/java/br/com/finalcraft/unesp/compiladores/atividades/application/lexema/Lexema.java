@@ -1,5 +1,7 @@
 package br.com.finalcraft.unesp.compiladores.atividades.application.lexema;
 
+import br.com.finalcraft.unesp.compiladores.atividades.application.AnalisadorLexico;
+
 public class Lexema {
 
     private String theExpression;
@@ -7,13 +9,15 @@ public class Lexema {
     private int linha;
     private int start;
     private int end;
+    private int id = -1;
 
     public Lexema(String theExpression, int linha, int start, int end) {
         this.theExpression = theExpression;
         this.lexemaType = LexemaType.getOf(theExpression);
         this.linha = linha;
-        this.start = start;
-        this.end = end;
+        this.start = start + (linha > 1 ? -1 : 0);
+        this.end = end + (linha > 1 ? -1 : 0);
+        this.id = ++AnalisadorLexico.currentID;
     }
 
     public String getTheExpression() {
@@ -36,8 +40,16 @@ public class Lexema {
         return linha;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
-        return "[start:" + start + ", end:" + end + ", expression:\'" + theExpression + "\',  lexemaType:" + lexemaType + "]";
+        return "[line: " + linha + ", start:" + start + ", end:" + end + ", expression:\'" + theExpression + "\',  lexemaType:" + lexemaType + "]";
     }
 }

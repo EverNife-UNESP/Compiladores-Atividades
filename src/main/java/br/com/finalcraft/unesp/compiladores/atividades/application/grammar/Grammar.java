@@ -69,12 +69,12 @@ public class Grammar {
         Grammar IDENTIFICADOR = new Grammar(new NaoTerminal("<identificador>"))
                 .addDerivacao(Derivation.valueOf(new Terminal("qualquerCoisa")));   //Identificador Qualquer
 
-        Grammar VARIAVEL = new Grammar(new NaoTerminal("<variavel>"))
-                .addDerivacao(Derivation.valueOf(new Terminal("umaVariavel")));      //Variavel Qualquer
+     //   Grammar VARIAVEL = new Grammar(new NaoTerminal("<variavel>"))
+     //           .addDerivacao(Derivation.valueOf(new Terminal("umaVariavel")));      //Variavel Qualquer
 
         mapOfgrammars.put(new NaoTerminal("<número>").toString(), GRAMAR_NUMERO);
         mapOfgrammars.put(new NaoTerminal("<identificador>").toString(), IDENTIFICADOR);
-        mapOfgrammars.put(new NaoTerminal("<variavel>").toString(), VARIAVEL);
+  //      mapOfgrammars.put(new NaoTerminal("<variavel>").toString(), VARIAVEL);
     }
 
 

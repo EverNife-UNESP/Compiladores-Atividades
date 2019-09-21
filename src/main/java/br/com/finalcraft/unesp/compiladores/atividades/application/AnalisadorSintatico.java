@@ -72,10 +72,13 @@ public class AnalisadorSintatico {
         historyLogs.addAll(historyLog.getPreviousLogs());
 
         int j = 1;
+        HistoryLog previousLog = null;
         for (HistoryLog log : historyLogs) {
             System.out.println("HistoryLog [" + (j++) + "]");
             System.out.println(log);
-            if (log.isErrored()) System.out.println(log.getError());
+            if (log.isErrored() && log.getError().getErrorType() != GrammarError.ErrorType.NO_UNTERNIMAL_MATCH) System.out.println(log.getError());
+            if (previousLog != null && previousLog.getNeededDerivations().size() > 0) System.out.println("Consumed " + todosLexemas.get(log.getStateIndex() - 1) + " with " + previousLog.getNeededDerivations().get(0) );
+            previousLog = log;
         }
     }
 
@@ -95,11 +98,12 @@ public class AnalisadorSintatico {
     private static HistoryLog checkGrammmarMark2(HistoryLog previousLog){
 
         debug(previousLog.toString());
+        errorTrackerLogs.add(previousLog);
 
         //Futuro tratamento de error vem aqui.... eu acho, vamo ve no que vai dar o resto...
         if (previousLog.isErrored()){
             debug("<-- Previous HistoryLog was Errored! + " + previousLog.getError() +  " \n");
-            errorTrackerLogs.add(previousLog);
+          //  errorTrackerLogs.add(previousLog);
             return previousLog;
         }
 

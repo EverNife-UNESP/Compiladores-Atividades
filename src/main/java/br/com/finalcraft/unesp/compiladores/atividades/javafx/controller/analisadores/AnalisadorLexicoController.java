@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
@@ -45,15 +46,18 @@ public class AnalisadorLexicoController implements FileLoaderHandler{
 
         PascalKeywordsAsync.instance.node.prefHeight(instance.codeBorderPanel.getHeight());
         PascalKeywordsAsync.instance.node.prefWidth(instance.codeBorderPanel.getWidth());
-        instance.codeBorderPanel.setCenter(PascalKeywordsAsync.instance.node);
     }
 
     public static void show(){
         dialog.show();
+        instance.codeBorderPanel.setCenter(PascalKeywordsAsync.instance.node);
     }
 
     @FXML
     private TableView<Lexema> tabela;
+
+    @FXML
+    private TableColumn<Lexema, String> columnID;
 
     @FXML
     private TableColumn<Lexema, String> columnExpressao;
@@ -79,6 +83,7 @@ public class AnalisadorLexicoController implements FileLoaderHandler{
     void initialize() {
         instance = this;
 
+        columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnExpressao.setCellValueFactory(new PropertyValueFactory<>("theExpression"));
         columnTipoLexema.setCellValueFactory(new PropertyValueFactory<>("lexemaType"));
         columnLinha.setCellValueFactory(new PropertyValueFactory<>("linha"));
@@ -86,6 +91,18 @@ public class AnalisadorLexicoController implements FileLoaderHandler{
         columnFim.setCellValueFactory(new PropertyValueFactory<>("end"));
 
         tabela.setItems(lexemaObservableList);
+
+        tabela.setRowFactory( tv -> {
+            TableRow<Lexema> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    Lexema rowData = row.getItem();
+                    PascalKeywordsAsync.instance.codeArea.requestFocus();
+                    PascalKeywordsAsync.instance.codeArea.selectRange(rowData.getLinha() - 1,rowData.getStart(),rowData.getLinha() - 1,rowData.getEnd() + 1);
+                }
+            });
+            return row ;
+        });
     }
 
 

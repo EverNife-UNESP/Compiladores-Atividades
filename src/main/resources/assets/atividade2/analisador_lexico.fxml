@@ -19,8 +19,9 @@
                </VBox.margin></Button>
             <TableView fx:id="tabela" editable="true" prefHeight="229.0" prefWidth="738.0">
               <columns>
-                <TableColumn fx:id="columnExpressao" editable="false" minWidth="-1.0" prefWidth="197.0" sortable="false" text="Expressão" />
-                <TableColumn fx:id="columnTipoLexema" editable="false" minWidth="-1.0" prefWidth="286.0" sortable="false" text="Tipo do Lexema" />
+                  <TableColumn fx:id="columnID" editable="false" minWidth="-1.0" prefWidth="15.0" sortable="false" text="ID" />
+                  <TableColumn fx:id="columnExpressao" editable="false" minWidth="-1.0" prefWidth="197.0" sortable="false" text="Expressão" />
+                  <TableColumn fx:id="columnTipoLexema" editable="false" minWidth="-1.0" prefWidth="286.0" sortable="false" text="Tipo do Lexema" />
                   <TableColumn fx:id="columnLinha" editable="false" minWidth="-1.0" prefWidth="103.0" sortable="false" text="Linha" />
                   <TableColumn fx:id="columnInicio" editable="false" minWidth="-1.0" prefWidth="75.0" sortable="false" text="Inicio" />
                   <TableColumn fx:id="columnFim" editable="false" minWidth="-1.0" prefWidth="107.0" sortable="false" text="Fim" />
