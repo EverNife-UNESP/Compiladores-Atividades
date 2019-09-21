@@ -1,5 +1,6 @@
 package br.com.finalcraft.unesp.compiladores.atividades.javafx.view.imported;
 
+import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.GramaticalImporter;
 import javafx.concurrent.Task;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -11,7 +12,11 @@ import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.reactfx.Subscription;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -19,6 +24,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class PascalKeywordsAsync {
 
@@ -53,44 +59,13 @@ public class PascalKeywordsAsync {
                     + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
     );
 
-    private static final String sampleCode = String.join("\n", new String[] {
-            "program correto;\n" +
-                    "int a, b, c;\n" +
-                    "boolean d, e, f;\n" +
-                    "\n" +
-                    "procedure proc(var a1 : int);\n" +
-                    "int a, b, c;\n" +
-                    "boolean d, e, f;\n" +
-                    "begin\n" +
-                    "\ta:=1;\n" +
-                    "\tif (a<1)\n" +
-                    "\t\ta:=12\n" +
-                    "end;\n" +
-                    "\n" +
-                    "begin\n" +
-                    "\ta:=2;\n" +
-                    "\tb:=10;\n" +
-                    "\tc:=11;\n" +
-                    "\ta:=b+c;\n" +
-                    "\td:=true;\n" +
-                    "\te:=false;\n" +
-                    "\tf:=true;\n" +
-                    "\tread(a);\n" +
-                    "\twrite(b);\n" +
-                    "\tif (d)\n" +
-                    "\tbegin\n" +
-                    "\t\ta:=20;\n" +
-                    "\t\tb:=10*c;\n" +
-                    "\t\tc:=a div b\n" +
-                    "\tend;\n" +
-                    "\twhile (a>1)\n" +
-                    "\tbegin\n" +
-                    "\t\tif (b>10)\n" +
-                    "\t\t\tb:=2;\n" +
-                    "\t\ta:=a-1\n" +
-                    "\tend\n" +
-                    "end."
-    });
+    private static String sampleCode = "";
+    static {
+        InputStream in = GramaticalImporter.class.getResourceAsStream("/assets/code-sample.txt");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        ArrayList<String> lines = reader.lines().collect(Collectors.toCollection(ArrayList::new));
+        sampleCode = String.join("\n",lines);
+    }
 
     public static CodeArea getCodeArea(){
         return instance.codeArea;

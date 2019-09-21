@@ -2,7 +2,7 @@ package br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data
 
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.Grammar;
 
-public class NaoTerminal implements Derivacao{
+public class NaoTerminal implements Derivation {
 
     final String naoTerminal;
     public NaoTerminal(String naoTerminal) {

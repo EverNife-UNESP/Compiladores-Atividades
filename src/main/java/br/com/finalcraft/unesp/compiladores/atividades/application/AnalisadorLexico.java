@@ -13,7 +13,7 @@ public class AnalisadorLexico {
     public static List<Lexema> analiseLexica(String theValue){
 
         //Aplica um replace usando a regex de comentário para limpar o texto.
-        theValue = theValue.replaceAll(PascalKeywordsAsync.COMMENT_PATTERN,"");
+        theValue = theValue.replaceAll(PascalKeywordsAsync.COMMENT_PATTERN," ");
 
 
         List<Lexema> foundLexemas = new ArrayList<>();
@@ -22,7 +22,7 @@ public class AnalisadorLexico {
         boolean foundWord = false;
         int wordStart = 0;
         StringBuilder stringBuilder = new StringBuilder();
-        int contadorLinha = 0;
+        int contadorLinha = 1;
         int contadorColuna = 0;
         for (int index = 0; index < charArray.length - 1; index++, contadorColuna++) {
             String charAtIndex = String.valueOf(charArray[index]);
@@ -54,11 +54,11 @@ public class AnalisadorLexico {
             }
 
             if (charAtIndex.matches(LexemaType.BRANCO.getRegex()) || isUnicharacterSymbol ){
+                if (charArray[index] == '\n'){
+                    contadorLinha++;
+                    contadorColuna = 0;
+                }
                 if (foundWord == true){
-                    if (charArray[index] == '\n'){
-                        contadorLinha++;
-                        contadorColuna = 0;
-                    }
                     foundWord = false;
                     foundLexemas.add(new Lexema(stringBuilder.toString(), contadorLinha, wordStart, contadorColuna - 1));
                     if (isUnicharacterSymbol){
@@ -83,7 +83,7 @@ public class AnalisadorLexico {
             stringBuilder.append(charAtIndex);
         }
 
-        foundLexemas.forEach(System.out::println);
+        //foundLexemas.forEach(System.out::println);
 
         return foundLexemas;
     }

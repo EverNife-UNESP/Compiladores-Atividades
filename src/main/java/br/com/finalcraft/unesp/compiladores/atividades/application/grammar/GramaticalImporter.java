@@ -1,16 +1,11 @@
 package br.com.finalcraft.unesp.compiladores.atividades.application.grammar;
 
-import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.Derivacao;
+import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.Derivation;
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.NaoTerminal;
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.Terminal;
-import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.LexemaType;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.view.imported.PascalKeywordsAsync;
 
 import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.CopyOption;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -52,7 +47,7 @@ public class GramaticalImporter {
 
             Grammar grammar = Grammar.getOrCreateGrammar(naoTerminal);
 
-            List<Derivacao> derivacaoList = new ArrayList<Derivacao>();
+            List<Derivation> derivationList = new ArrayList<Derivation>();
 
 
             int j = 0;
@@ -61,44 +56,45 @@ public class GramaticalImporter {
                 j++;
 
                 String derivationElement = splitedRule[i];
-                Derivacao derivacao;
+                Derivation derivation;
 
                 if (derivationElement.equals("VAZIO")) continue;
 
                 if (derivationElement.startsWith("<") && derivationElement.endsWith(">") && !derivationElement.contentEquals("<>")){
-                    derivacao = new NaoTerminal(derivationElement);
+                    derivation = new NaoTerminal(derivationElement);
+                    Grammar.getOrCreateGrammar((NaoTerminal) derivation);    //Garantir que esse simbolo terminal fique salvo na lista de gramáticas para futuras checagens e validações
                     System.out.println("\t\tDerivation["+ j + "] NonTerminal(" + derivationElement + ")");
                 }else {
-                    derivacao = new Terminal(derivationElement);
+                    derivation = new Terminal(derivationElement);
                     System.out.println("\t\tDerivation["+ j + "] Terminal(" + derivationElement + ")");
                 }
 
-                derivacaoList.add(derivacao);
+                derivationList.add(derivation);
             }
 
             String regraGerada = "";
-            if (derivacaoList.size() == 0){
+            if (derivationList.size() == 0){
                 regraGerada = "VAZIO";
             }else {
-                for (Derivacao derivacao : derivacaoList) {
-                    regraGerada +=  " " + derivacao;
+                for (Derivation derivation : derivationList) {
+                    regraGerada +=  " " + derivation;
                 }
             }
 
-            grammar.addDerivacao(derivacaoList);
+            grammar.addDerivacao(derivationList);
             System.out.println("\t\t\tRegra gramatical gerada: " + regraGerada);
         }
 
+        System.out.println(" \nUm total de " + Grammar.mapOfgrammars.values().size() + " regras gramáticais foram geradas!");
 
         Grammar.mapOfgrammars.values().forEach(grammar -> {
             if (grammar.getDerivacao2DList().isEmpty()){
-                System.out.println("Grammar: " + grammar + " does not have a derivationList");
-                System.out.println("Grammar: " + grammar + " does not have a derivationList");
-                System.out.println("Grammar: " + grammar + " does not have a derivationList");
-                System.out.println("Grammar: " + grammar + " does not have a derivationList");
-                System.out.println("Grammar: " + grammar + " does not have a derivationList");
-                System.out.println("Grammar: " + grammar + " does not have a derivationList");
-                System.out.println("Grammar: " + grammar + " does not have a derivationList");
+                System.out.println("Grammar: " + grammar.getOrigem() + " does not have a derivationList");
+                System.out.println("Grammar: " + grammar.getOrigem() + " does not have a derivationList");
+                System.out.println("Grammar: " + grammar.getOrigem() + " does not have a derivationList");
+                System.out.println("Grammar: " + grammar.getOrigem() + " does not have a derivationList");
+                System.out.println("Grammar: " + grammar.getOrigem() + " does not have a derivationList");
+                System.out.println("Grammar: " + grammar.getOrigem() + " does not have a derivationList");
             }
         });
     }

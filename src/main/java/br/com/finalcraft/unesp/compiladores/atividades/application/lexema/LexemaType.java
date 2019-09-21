@@ -157,8 +157,9 @@ public enum LexemaType implements LexemaTypeEnum{
         OR,
         NOT,
         MOD,
-        IN
-        ;
+        IN,
+        READ,
+        WRITE;
 
         public static Map<String, Reservada> mapOfReservado = new HashMap<>();
 
