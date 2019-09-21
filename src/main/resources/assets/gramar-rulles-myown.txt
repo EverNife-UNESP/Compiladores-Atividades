@@ -2,7 +2,7 @@
 				program <identificador>
 				;
 				<bloco>
-			//	.
+				.
 
 
 ☢2.0		<bloco> ::=
@@ -55,21 +55,26 @@
 			(
 			<seção_de_parâmetros_formais>
 			)
+			
+			
+☢8.5		<parâmetros_formais> ::=
+			VAZIO
+
 
 
 ☢9.0		<seção_de_parâmetros_formais> ::=
-			var
+			<possible_var>
 			<lista_de_identificadores>
 			:
-			<identificador>
-☢9.0		<seção_de_parâmetros_formais> ::=
-			var
-			<lista_de_identificadores>
-			:
-			<identificador>
+			<tipo>
+			<possible_next_seção_de_parâmetros_formais>		
+			
+☢9.5		<possible_next_seção_de_parâmetros_formais> ::=
 			;
 			<seção_de_parâmetros_formais>
-
+			
+☢9.5		<possible_next_seção_de_parâmetros_formais> ::=
+			VAZIO
 
 ☢9.5		<possible_var> ::=
 			var
@@ -101,7 +106,7 @@
 
 
 ☢12.0	<atribuição> ::=
-			<variável> m:= <expressão>
+			<variável> := <expressão>
 
 
 ☢13.0	<chamada_de_procedimento> ::=
@@ -112,9 +117,14 @@
 
 
 ☢14.0	<comando_condicional_um> ::=
-			if <expressão> then <comando> else <comando>
-☢14.0	<comando_condicional_um> ::=
-			if <expressão> then <comando>
+			if <expressão> then <comando> <comando_condicional_um_else>
+			
+			
+☢14.5	<comando_condicional_um_else> ::=
+			else <comando>
+☢14.5	<comando_condicional_um_else> ::=
+			VAZIO
+
 
 ☢15.0	<comando_repetitivo_um> ::=
 			while <expressão> do <comando>
@@ -142,6 +152,7 @@
 
 ☢18.5	<mais_ou_menos> ::= +
 ☢18.5	<mais_ou_menos> ::= -
+☢18.5	<mais_ou_menos> ::= VAZIO
 
 ☢18.5	<termo_opcional> ::=
 			<mais_ou_menos_ou_or>
@@ -166,6 +177,8 @@
 
 ☢20.0	<fator> ::= <variavel>
 ☢20.0	<fator> ::= <número>
+☢20.0	<fator> ::= true
+☢20.0	<fator> ::= false
 ☢20.0	<fator> ::= ( <expressão> )
 ☢20.0	<fator> ::= not <fator>
 
@@ -184,10 +197,12 @@
 
 
 /*
-Ta_bom_já,_daqui_para_baixo_não_é_utilizado.
 
-<número>_e_<identificador>_são_termináias_já_adicionadis_diretamente_no_programa
+<número>        |
+<identificador> |
+<variavel>      |    -> estes são termináias já adicionadis diretamente no programa devido a sua "natureza dinâmica"
 
+Ta bom já, daqui para baixo não é utilizado.
 
 
 23.0_<número> ::= <dígito> {<dígito>}
