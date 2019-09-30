@@ -9,6 +9,7 @@ import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.history.HistoryLog;
 import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.Lexema;
 import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.LexemaType;
+import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.LexemaTypeEnum;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class AnalisadorSintatico {
 
-    private static List<Lexema> todosLexemas = new ArrayList<Lexema>();
+    public static List<Lexema> todosLexemas = new ArrayList<Lexema>();
     private static int tamanhoLexemas = 0;
     private static int index = 0;
     private static List<HistoryLog> errorTrackerLogs = new ArrayList<HistoryLog>();
@@ -26,7 +27,7 @@ public class AnalisadorSintatico {
         index = historyLog.getStateIndex();
     }
 
-    public static void analiseSintatica(List<Lexema> lexemas){
+    public static HistoryLog analiseSintatica(List<Lexema> lexemas){
 
         todosLexemas = lexemas;
         tamanhoLexemas = todosLexemas.size();
@@ -40,13 +41,17 @@ public class AnalisadorSintatico {
       //  checkGrammmar(GRAMMAR_PROGRAM);
 
 
-        HistoryLog historyLog = checkGrammmarMark2(new HistoryLog().createNewLogsFor(GRAMMAR_PROGRAM)[0]);
+        HistoryLog currentHistoryLog = checkGrammmarMark2(new HistoryLog().createNewLogsFor(GRAMMAR_PROGRAM)[0]);
 
         System.out.println("RETURNED HISTORY LOG");
-        printHistoryLog(historyLog);
+        printHistoryLog(currentHistoryLog);
+        System.out.println("FullyMatch????:  " + currentHistoryLog.isFullyMach());
+        System.out.println("FullyMatch????:  " + currentHistoryLog.isFullyMach());
+        System.out.println("FullyMatch????:  " + currentHistoryLog.isFullyMach());
+        System.out.println("FullyMatch????:  " + currentHistoryLog.isFullyMach());
 
-        HistoryLog topError = getTopError();
-        if (topError != null){
+        HistoryLog topErrorHistoryLog = getTopError();
+        if (topErrorHistoryLog != null){
             System.out.println("TopErroredLog");
             System.out.println("TopErroredLog");
             System.out.println("TopErroredLog");
@@ -57,12 +62,12 @@ public class AnalisadorSintatico {
             System.out.println("TopErroredLog");
             System.out.println("TopErroredLog");
             System.out.println("TopErroredLog");
-            printHistoryLog(topError);
-
+           printHistoryLog(topErrorHistoryLog);
         }else {
             System.out.println("Top Error is null!!!!");
         }
 
+        return currentHistoryLog.isFullyMach() ? currentHistoryLog : topErrorHistoryLog;
     }
 
     private static void printHistoryLog(HistoryLog historyLog){
@@ -72,20 +77,20 @@ public class AnalisadorSintatico {
         historyLogs.addAll(historyLog.getPreviousLogs());
 
         int j = 1;
-        HistoryLog previousLog = null;
+        //HistoryLog previousLog = null;
         for (HistoryLog log : historyLogs) {
             System.out.println("HistoryLog [" + (j++) + "]");
             System.out.println(log);
-            if (log.isErrored() && log.getError().getErrorType() != GrammarError.ErrorType.NO_UNTERNIMAL_MATCH) System.out.println(log.getError());
-            if (previousLog != null && previousLog.getNeededDerivations().size() > 0) System.out.println("Consumed " + todosLexemas.get(log.getStateIndex() - 1) + " with " + previousLog.getNeededDerivations().get(0) );
-            previousLog = log;
+          //  if (log.isErrored() && log.getError().getErrorType() != GrammarError.ErrorType.NO_UNTERNIMAL_MATCH) System.out.println(log.getError());
+           // if (previousLog != null && previousLog.getNeededDerivations().size() > 0) System.out.println("Consumed " + todosLexemas.get(log.getStateIndex() - 1) + " with " + previousLog.getNeededDerivations().get(0) );
+           // previousLog = log;
         }
     }
 
 
     public static HistoryLog getTopError(){
-        Collections.sort(errorTrackerLogs);
-        Collections.reverse(errorTrackerLogs);
+        Collections.sort(errorTrackerLogs);//Ordena do menor para o Maior
+        Collections.reverse(errorTrackerLogs);//Inverte a ordem, pois quero do maior para o menor.
         return errorTrackerLogs.size() > 0 ? errorTrackerLogs.get(0) : null;
     }
 
@@ -98,12 +103,12 @@ public class AnalisadorSintatico {
     private static HistoryLog checkGrammmarMark2(HistoryLog previousLog){
 
         debug(previousLog.toString());
-        errorTrackerLogs.add(previousLog);
+       // errorTrackerLogs.add(previousLog);
 
         //Futuro tratamento de error vem aqui.... eu acho, vamo ve no que vai dar o resto...
         if (previousLog.isErrored()){
             debug("<-- Previous HistoryLog was Errored! + " + previousLog.getError() +  " \n");
-          //  errorTrackerLogs.add(previousLog);
+            errorTrackerLogs.add(previousLog);
             return previousLog;
         }
 
@@ -111,27 +116,28 @@ public class AnalisadorSintatico {
         currentHistoryLog.restoreMachineState();
         Lexema currentLexema = getCurrentLexema();
 
-        if (!currentHistoryLog.hasNextDerivation() && currentLexema == null){
-            currentHistoryLog.setFullyMach();
-            debug("\n\n<-------- FullyMatch!\n\n");
-            return currentHistoryLog;
+        if (!currentHistoryLog.hasNextDerivation()){
+            if (currentLexema == null){
+                currentHistoryLog.setFullyMach();
+                debug("\n\n<-------- FullyMatch!\n\n");
+                return currentHistoryLog;
+            }else {
+                currentHistoryLog.setError(new GrammarError(currentLexema,(LexemaTypeEnum) null, GrammarError.ErrorType.UNEXPECTED_END_OF_NON_TERMINALS));
+                return checkGrammmarMark2(currentHistoryLog);
+            }
         }
 
         Derivation derivation = currentHistoryLog.getNextDerivation();
         //Lógica para caso a derivação seja TERMINAL
         if (derivation instanceof Terminal){
-            currentHistoryLog.updateIndex(index + 1);
-            GrammarError grammarError = currentHistoryLog.consume(currentLexema);
-            if (grammarError != null) {
-                currentHistoryLog.setError(grammarError);
-            }
+            HistoryLog newHistoryLog = currentHistoryLog.consume(currentLexema);
             debug("Consuming " + currentLexema);
-            return checkGrammmarMark2(currentHistoryLog);
+            return checkGrammmarMark2(newHistoryLog);
         }
 
         //Lógica para caso a derivação seja NÃO_TERMINAL
         NaoTerminal naoTerminal = (NaoTerminal)derivation;
-        currentHistoryLog.consumeNonTerminalDerivation();
+        currentHistoryLog.consumeNonTerminalDerivation(currentLexema);
         Grammar derivationGrammar = Grammar.getGrammar(naoTerminal);
         HistoryLog[] derivativeHistoryLogs = currentHistoryLog.createNewLogsFor(derivationGrammar);
 
@@ -152,6 +158,26 @@ public class AnalisadorSintatico {
         return checkGrammmarMark2(currentHistoryLog);
     }
 
+    private static void ignoreAllLexemasUntilNextSemiColum(){
+        for (int i = index; i < todosLexemas.size(); i++) {
+            if (todosLexemas.get(i).getLexemaType() == LexemaType.PONTO_E_VIRGULA){
+                index = i + 1;
+                return;
+            }
+        }
+    }
+
+    private static Lexema getCurrentLexema(){
+        if (index >= tamanhoLexemas) return null;
+        return todosLexemas.get(index);
+    }
+
+    private static HistoryLog startingGrammar(){
+        return new HistoryLog();
+    }
+
+    //OLD VERSION
+    /*
     private static List<GrammarError> checkGrammmar(Grammar grammar){
 
         HistoryLog historyLog = startingGrammar();          // Seta o grammarStartIndex para caso de errado alguma derivação
@@ -193,7 +219,7 @@ public class AnalisadorSintatico {
                     System.out.println("            CurrenteLexema is Terminal: " + currentLexema);
                     if (currentLexema.getLexemaType() != terminalDerivation.getLexemaType()){
                         System.out.println("                ✖✖✖✖ Fail to match, backtracking!");
-                      //  grammarErrorList.add(new GrammarError(currentLexema,terminalDerivation.getLexemaType()));
+                        //  grammarErrorList.add(new GrammarError(currentLexema,terminalDerivation.getLexemaType()));
                         forceNextCheck = true;
                         break;
                     }
@@ -223,22 +249,5 @@ public class AnalisadorSintatico {
 
         return grammarErrorList;
     }
-
-    private static void ignoreAllLexemasUntilNextSemiColum(){
-        for (int i = index; i < todosLexemas.size(); i++) {
-            if (todosLexemas.get(i).getLexemaType() == LexemaType.PONTO_E_VIRGULA){
-                index = i + 1;
-                return;
-            }
-        }
-    }
-
-    private static Lexema getCurrentLexema(){
-        if (index == tamanhoLexemas) return null;
-        return todosLexemas.get(index);
-    }
-
-    private static HistoryLog startingGrammar(){
-        return new HistoryLog();
-    }
+    */
 }

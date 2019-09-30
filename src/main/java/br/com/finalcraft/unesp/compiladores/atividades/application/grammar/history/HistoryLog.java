@@ -17,6 +17,7 @@ public class HistoryLog implements Comparable<HistoryLog>{
     private List<HistoryLog> previousLogs;
     private List<Derivation> neededDerivations;
     private GrammarError grammarError = null;
+    private HistoryMove lastMove = null;
 
     public HistoryLog() {
         this.stateIndex = 0;
@@ -53,22 +54,40 @@ public class HistoryLog implements Comparable<HistoryLog>{
         return this.neededDerivations.get(0);
     }
 
-    public Derivation consumeNonTerminalDerivation(){
+    public Derivation consumeTerminalDerivation(){
         return this.neededDerivations.remove(0);
     }
 
-    public GrammarError consume(Lexema currentLexema){
-        Terminal terminalDerivation = (Terminal) consumeNonTerminalDerivation();
+    public Derivation consumeNonTerminalDerivation(Lexema lexema){
+        this.lastMove = new HistoryMove(lexema,this.neededDerivations.get(0));
+        return this.neededDerivations.remove(0);
+    }
+
+    public HistoryLog consume(Lexema currentLexema){
+
+        HistoryLog newHistoryLog = this.clone();
+        newHistoryLog.updateIndex(this.stateIndex + 1);
+
+        Terminal terminalDerivation = (Terminal) newHistoryLog.consumeTerminalDerivation();
+
+        newHistoryLog.lastMove = new HistoryMove(currentLexema,terminalDerivation);
+        newHistoryLog.previousLogs.add(this);
+
 
         if (currentLexema == null) {
-            return new GrammarError(currentLexema,terminalDerivation.getLexemaType(), GrammarError.ErrorType.UNEXPECTED_END_OF_FILE);
+            newHistoryLog.grammarError =  new GrammarError(currentLexema,terminalDerivation.getLexemaType(), GrammarError.ErrorType.UNEXPECTED_END_OF_FILE);
+            return newHistoryLog;
         }
 
-        if (currentLexema.getLexemaType() != terminalDerivation.getLexemaType()){
-            return new GrammarError(currentLexema,terminalDerivation.getLexemaType(), GrammarError.ErrorType.NO_TERMINAL_MATCH);
+        if (terminalDerivation == null
+                || currentLexema.getLexemaType()
+                !=
+                terminalDerivation.getLexemaType()){
+            newHistoryLog.grammarError =  new GrammarError(currentLexema,terminalDerivation.getLexemaType(), GrammarError.ErrorType.NO_TERMINAL_MATCH);
+            return newHistoryLog;
         }
 
-        return null;
+        return newHistoryLog;
     }
 
 
@@ -144,6 +163,8 @@ public class HistoryLog implements Comparable<HistoryLog>{
         for (int i = neededDerivations.size() - 1; i >= 0; i--) {
             stringBuilder.append("\n               - " + neededDerivations.get(i).toString());
         }
+
+        stringBuilder.append("\n\n    LastMove: " + lastMove);
 
         return stringBuilder.toString();
     }

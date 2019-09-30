@@ -3,7 +3,9 @@ package br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analis
 import br.com.finalcraft.unesp.compiladores.atividades.JavaFXMain;
 import br.com.finalcraft.unesp.compiladores.atividades.application.AnalisadorLexico;
 import br.com.finalcraft.unesp.compiladores.atividades.application.AnalisadorSintatico;
+import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.history.HistoryLog;
 import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.Lexema;
+import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.LexemaType;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.filemanager.FileLoaderHandler;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.view.MyFXMLs;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.view.imported.PascalKeywordsAsync;
@@ -14,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
@@ -80,6 +83,12 @@ public class AnalisadorSintaticoController implements FileLoaderHandler{
     @FXML
     private BorderPane codeBorderPanel;
 
+    @FXML
+    private TextArea errosLexicos;
+
+    @FXML
+    private TextArea errosSintaticos;
+
     private ObservableList<Lexema> lexemaObservableList = FXCollections.observableArrayList();
 
     @FXML
@@ -117,9 +126,28 @@ public class AnalisadorSintaticoController implements FileLoaderHandler{
             List<Lexema> lexemaList = AnalisadorLexico.analiseLexica(codeArea.getText());
             lexemaObservableList = FXCollections.observableList(lexemaList);
             tabela.setItems(lexemaObservableList);
-            AnalisadorSintatico.analiseSintatica(lexemaList);
+            HistoryLog historyLog = AnalisadorSintatico.analiseSintatica(lexemaList);
+            checkForErroredLexemas();
+            if (historyLog.isFullyMach()){
+                this.errosSintaticos.setText("Código 100% Correto!" +
+                        "\nCódigo 100% Correto!" +
+                        "\nCódigo 100% Correto!" +
+                        "\nCódigo 100% Correto!");
+            }else {
+                this.errosSintaticos.setText("[" + historyLog.getError().getLexema().getId() + "]Erro:" + historyLog.getError().toString());
+            }
         }
 
+    }
+
+    public void checkForErroredLexemas(){
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Lexema lexema : AnalisadorSintatico.todosLexemas) {
+            if (lexema.getLexemaType() instanceof LexemaType.Error){
+                stringBuilder.append("[" + lexema.getId() + "] Errored lexema: " + lexema.getTheExpression() );
+            }
+        }
+        errosLexicos.setText(stringBuilder.toString());
     }
 
     @Override

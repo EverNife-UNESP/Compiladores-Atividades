@@ -28,8 +28,7 @@ public enum LexemaType implements LexemaTypeEnum{
     MENOR(Pattern.quote("<")),
     MENOR_IGUAL(Pattern.quote("<=")),
     MAIOR_IGUAL(Pattern.quote(">=")),
-    ATRIBUICAO(Pattern.quote(":=")),
-    DESCONHECIDO(Pattern.quote(""));
+    ATRIBUICAO(Pattern.quote(":="));
 
     public String regex;
 
@@ -42,7 +41,7 @@ public enum LexemaType implements LexemaTypeEnum{
     }
 
     public static LexemaTypeEnum getOf(String stringToCheck){
-        LexemaTypeEnum theLexema = LexemaType.DESCONHECIDO;
+        LexemaTypeEnum theLexema = Error.DESCONHECIDO;
         for (LexemaType lexemaType : LexemaType.values()){
             if (stringToCheck.matches(lexemaType.getRegex())){
                 theLexema = lexemaType;
@@ -92,7 +91,9 @@ public enum LexemaType implements LexemaTypeEnum{
     public static enum Error implements LexemaTypeEnum{
         INTEIRO_OVERSIZE(""),  //Inteiro com mais de 6 digitos
         DOUBLE_OVERSIZE(""), //6.6 Double (mais de 6 digitos antes ou depois do .
-        IDENTIFICADOR_OVERSIZE(""); //Mais de 20 caracteres
+        IDENTIFICADOR_OVERSIZE(""), //Mais de 20 caracteres
+        DESCONHECIDO(Pattern.quote(""));
+
 
         ;
         String regex;

@@ -39,6 +39,8 @@ public class GrammarError{
                 return "Error at lexema " + lexema + ", was expectiong " + expected + " but found the end of File!";
             case NO_UNTERNIMAL_MATCH:
                 return "Error at lexema " + lexema + ", found " + found + " but needed the FOLLOW_OF(" + grammar.getOrigem() + ")" ;
+            case UNEXPECTED_END_OF_NON_TERMINALS:
+                return "Error at lexema " + lexema + ", nothing was expected, but found " + found;
             default:
                 return "Error at lexema " + lexema + ", was expectiong " + expected + "!";
         }
@@ -68,6 +70,7 @@ public class GrammarError{
         NO_TERMINAL_MATCH,
         NO_UNTERNIMAL_MATCH,
         UNEXPECTED_END_OF_FILE,
+        UNEXPECTED_END_OF_NON_TERMINALS,
         UNKNOWN_ERROR;
     }
 }
