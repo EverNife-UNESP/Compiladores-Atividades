@@ -154,7 +154,7 @@ public class AnalisadorSintaticoController implements FileLoaderHandler{
     public void onFileLoaded(File file) {
         try {
             byte[] encoded = Files.readAllBytes(file.toPath());
-            String fileConcent = new String(encoded, Charset.defaultCharset());
+            String fileConcent = new String(encoded, Charset.forName("UTF-8"));
             System.out.println("Setting CodeText");
             PascalKeywordsAsync.getCodeArea().clear();
             PascalKeywordsAsync.getCodeArea().replaceText(0, 0, fileConcent);

@@ -61,10 +61,18 @@ public class PascalKeywordsAsync {
 
     private static String sampleCode = "";
     static {
-        InputStream in = GramaticalImporter.class.getResourceAsStream("/assets/code-sample.txt");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        ArrayList<String> lines = reader.lines().collect(Collectors.toCollection(ArrayList::new));
-        sampleCode = String.join("\n",lines);
+        try {
+            InputStream in = PascalKeywordsAsync.class.getResourceAsStream("/assets/code-sample.txt");
+            InputStreamReader inReader = new InputStreamReader(in,"UTF-8");
+            BufferedReader reader = new BufferedReader(inReader);
+            ArrayList<String> lines = reader.lines().collect(Collectors.toCollection(ArrayList::new));
+            sampleCode = String.join("\n",lines);
+            if (sampleCode.charAt(0) != 'p'){
+                sampleCode = sampleCode.substring(1);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static CodeArea getCodeArea(){

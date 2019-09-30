@@ -21,6 +21,7 @@ version '1.0.1a'
 sourceCompatibility = 1.8
 
 compileJava.options.encoding = 'UTF-8'
+
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
@@ -36,7 +37,6 @@ repositories {
 dependencies {
     compile 'com.jfoenix:jfoenix:8.0.8' // Java 8
     compile 'com.github.FXMisc:RichTextFX:v0.10.1'
-
 }
 
 shadowJar {
