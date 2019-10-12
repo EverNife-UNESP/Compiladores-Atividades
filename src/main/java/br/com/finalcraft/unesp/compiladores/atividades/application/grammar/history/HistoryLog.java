@@ -17,7 +17,7 @@ public class HistoryLog implements Comparable<HistoryLog>{
     private List<HistoryLog> previousLogs;
     private List<Derivation> neededDerivations;
     private GrammarError grammarError = null;
-    private HistoryMove lastMove = null;
+    private HistoryMove currentMove = null;
 
     public HistoryLog() {
         this.stateIndex = 0;
@@ -35,10 +35,21 @@ public class HistoryLog implements Comparable<HistoryLog>{
         return newHistoryLogs;
     }
 
+
+
     private HistoryLog createWithNewDerivations(List<Derivation> derivationListToADD){
+        HistoryLog newThis = this.clone();
+
+        //Null check needed for First PROGRAM check....
+        if (newThis.currentMove != null) newThis.currentMove.setNonTerminalDerivations(derivationListToADD);
+
         HistoryLog newHistoryLog = this.clone();
 
-        newHistoryLog.previousLogs.add(this);
+        //Null check needed for First PROGRAM check....
+        if (newHistoryLog.neededDerivations.size() > 0) newHistoryLog.neededDerivations.remove(0);
+
+
+        newHistoryLog.previousLogs.add(newThis);
         //For inverso, adicionado as novas derivações do fim para o inicio
         for (int i = derivationListToADD.size() - 1; i >= 0; i--) {
             newHistoryLog.neededDerivations.add(0,derivationListToADD.get(i));
@@ -59,18 +70,18 @@ public class HistoryLog implements Comparable<HistoryLog>{
     }
 
     public Derivation consumeNonTerminalDerivation(Lexema lexema){
-        this.lastMove = new HistoryMove(lexema,this.neededDerivations.get(0));
-        return this.neededDerivations.remove(0);
+        this.currentMove = new HistoryMove(lexema,this.neededDerivations.get(0));
+        return this.neededDerivations.get(0);
     }
 
     public HistoryLog consume(Lexema currentLexema){
+        this.currentMove = new HistoryMove(currentLexema,this.neededDerivations.get(0));
 
         HistoryLog newHistoryLog = this.clone();
         newHistoryLog.updateIndex(this.stateIndex + 1);
 
         Terminal terminalDerivation = (Terminal) newHistoryLog.consumeTerminalDerivation();
 
-        newHistoryLog.lastMove = new HistoryMove(currentLexema,terminalDerivation);
         newHistoryLog.previousLogs.add(this);
 
 
@@ -101,6 +112,7 @@ public class HistoryLog implements Comparable<HistoryLog>{
         newHistoryLog.previousLogs.addAll(this.previousLogs);
         newHistoryLog.neededDerivations.addAll(this.neededDerivations);
 
+        newHistoryLog.currentMove = this.currentMove;
         return newHistoryLog;
     }
 
@@ -164,7 +176,7 @@ public class HistoryLog implements Comparable<HistoryLog>{
             stringBuilder.append("\n               - " + neededDerivations.get(i).toString());
         }
 
-        stringBuilder.append("\n\n    LastMove: " + lastMove);
+        stringBuilder.append("\n\n    CurrentMove: " + currentMove);
 
         return stringBuilder.toString();
     }

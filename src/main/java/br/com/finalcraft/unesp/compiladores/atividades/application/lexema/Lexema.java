@@ -52,4 +52,8 @@ public class Lexema {
     public String toString() {
         return "[line: " + linha + ", start:" + start + ", end:" + end + ", expression:\'" + theExpression + "\',  lexemaType:" + lexemaType + "]";
     }
+
+    public String simpleToString(){
+        return "[expression:\'" + theExpression + "\',  lexemaType:" + lexemaType + "]";
+    }
 }

@@ -38,36 +38,21 @@ public class AnalisadorSintatico {
 
         Grammar GRAMMAR_PROGRAM = Grammar.getOrCreateGrammar(new NaoTerminal("<programa>"));
 
-      //  checkGrammmar(GRAMMAR_PROGRAM);
-
-
         HistoryLog currentHistoryLog = checkGrammmarMark2(new HistoryLog().createNewLogsFor(GRAMMAR_PROGRAM)[0]);
 
-        System.out.println("RETURNED HISTORY LOG");
-        printHistoryLog(currentHistoryLog);
         System.out.println("FullyMatch????:  " + currentHistoryLog.isFullyMach());
         System.out.println("FullyMatch????:  " + currentHistoryLog.isFullyMach());
         System.out.println("FullyMatch????:  " + currentHistoryLog.isFullyMach());
         System.out.println("FullyMatch????:  " + currentHistoryLog.isFullyMach());
 
         HistoryLog topErrorHistoryLog = getTopError();
-        if (topErrorHistoryLog != null){
-            System.out.println("TopErroredLog");
-            System.out.println("TopErroredLog");
-            System.out.println("TopErroredLog");
-            System.out.println("TopErroredLog");
-            System.out.println("TopErroredLog");
-            System.out.println("TopErroredLog");
-            System.out.println("TopErroredLog");
-            System.out.println("TopErroredLog");
-            System.out.println("TopErroredLog");
-            System.out.println("TopErroredLog");
-           printHistoryLog(topErrorHistoryLog);
-        }else {
-            System.out.println("Top Error is null!!!!");
-        }
 
-        return currentHistoryLog.isFullyMach() ? currentHistoryLog : topErrorHistoryLog;
+        currentHistoryLog = currentHistoryLog.isFullyMach() ? currentHistoryLog : topErrorHistoryLog;
+        printHistoryLog(currentHistoryLog);
+        if (currentHistoryLog.isErrored()){
+            System.out.println("!!!Errored LOG!!!");
+        }
+        return currentHistoryLog;
     }
 
     private static void printHistoryLog(HistoryLog historyLog){
