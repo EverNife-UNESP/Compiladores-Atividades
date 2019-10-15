@@ -155,11 +155,11 @@ public enum LexemaType implements LexemaTypeEnum{
         VAR,
         CONST,
         AND,
+        DIV,
         OR,
         NOT,
         MOD,
         IN;
-
         public static Map<String, Reservada> mapOfReservado = new HashMap<>();
 
         public static LexemaTypeEnum getOf(String stringToCheck){

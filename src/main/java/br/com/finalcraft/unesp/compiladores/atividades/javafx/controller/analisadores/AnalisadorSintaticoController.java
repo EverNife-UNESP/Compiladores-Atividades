@@ -105,7 +105,19 @@ public class AnalisadorSintaticoController implements FileLoaderHandler{
         tabela.setItems(lexemaObservableList);
 
         tabela.setRowFactory( tv -> {
-            TableRow<Lexema> row = new TableRow<>();
+            TableRow<Lexema> row = new TableRow<Lexema>(){
+                @Override
+                protected void updateItem(Lexema item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null) {
+                        setStyle("");
+                    } else if (item.getLexemaType() instanceof LexemaType.Error) {
+                        setStyle("-fx-background-color: tomato;");
+                    } else {
+                        setStyle("");
+                    }
+                }
+            };
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
                     Lexema rowData = row.getItem();

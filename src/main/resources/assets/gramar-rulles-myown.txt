@@ -134,10 +134,13 @@
 
 
 ☢16.0	<expressão> ::=
-			<expressão_simples> <relação> <expressão_simples>
+			<expressão_simples> <relacao_expressão>
 
-☢16.0	<expressão> ::=
-			<expressão_simples>
+☢16.0	<relacao_expressão> ::=
+			<relação> <expressão_simples>
+
+☢16.0	<relacao_expressão> ::=
+			VAZIO
 
 
 ☢17.0	<relação> ::= =
@@ -186,9 +189,10 @@
 ☢20.0	<fator> ::= not <fator>
 
 
-☢21.0	<variável> ::= <identificador>
-☢21.0	<variável> ::= <identificador> <expressão>
+☢21.0	<variável> ::= <identificador> //<opt_expressão>
 
+☢21.0	<opt_expressão> ::= <expressão>
+☢21.0	<opt_expressão> ::= VAZIO
 
 ☢22.0	<lista_de_expressões> ::= <expressão> <outra_expressão>
 
