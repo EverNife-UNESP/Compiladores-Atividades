@@ -1,4 +1,4 @@
-﻿☢1.0		<programa> ::=
+☢1.0		<programa> ::=
 				program <identificador>
 				;
 				<bloco>
