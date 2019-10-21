@@ -128,8 +128,9 @@ public class HistoryLog implements Comparable<HistoryLog>{
         return this.grammarError != null;
     }
 
-    public void setError(GrammarError grammarError){
+    public HistoryLog setError(GrammarError grammarError){
         this.grammarError = grammarError;
+        return this;
     }
 
     public GrammarError getError() {

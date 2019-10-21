@@ -1,6 +1,5 @@
 package br.com.finalcraft.unesp.compiladores.atividades.javafx.view.imported;
 
-import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.GramaticalImporter;
 import javafx.concurrent.Task;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -83,7 +82,7 @@ public class PascalKeywordsAsync {
     private ExecutorService executor;
 
     public Node node;
-    public String styleSheet = JavaKeywordsAsyncDemo.class.getResource("/assets/java-keywords.css").toString();
+    public String styleSheet = PascalKeywordsAsync.class.getResource("/assets/my-own-keywords.css").toString();
 
     private Scene scene;
 

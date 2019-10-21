@@ -12,6 +12,7 @@ public class NaoTerminal implements Derivation {
     public Grammar getOwnGrammar() {
         return Grammar.getOrCreateGrammar(this);
     }
+
     @Override
     public String toString() {
         return naoTerminal;

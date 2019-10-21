@@ -103,6 +103,8 @@
 ☢11.0	<comando> ::= <comando_composto>
 ☢11.0	<comando> ::= <comando_condicional_um>
 ☢11.0	<comando> ::= <comando_repetitivo_um>
+☢11.0	<comando> ::= {jump_to_;}
+
 
 
 ☢12.0	<atribuição> ::=

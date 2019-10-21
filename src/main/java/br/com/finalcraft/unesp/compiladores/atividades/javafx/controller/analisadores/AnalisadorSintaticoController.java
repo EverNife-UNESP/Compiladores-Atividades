@@ -26,6 +26,7 @@ import org.fxmisc.richtext.CodeArea;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AnalisadorSintaticoController implements FileLoaderHandler{
@@ -139,7 +140,17 @@ public class AnalisadorSintaticoController implements FileLoaderHandler{
             lexemaObservableList = FXCollections.observableList(lexemaList);
             tabela.setItems(lexemaObservableList);
             HistoryLog historyLog = AnalisadorSintatico.analiseSintatica(lexemaList);
+
+            List<HistoryLog> allHistoryLogs = new ArrayList<HistoryLog>();
+            allHistoryLogs.addAll(historyLog.getPreviousLogs());
+            allHistoryLogs.add(historyLog);
+
             checkForErroredLexemas();
+
+            for (HistoryLog allHistoryLog : allHistoryLogs) {
+                
+            }
+
             if (historyLog.isFullyMach()){
                 this.errosSintaticos.setText("Código 100% Correto!" +
                         "\nCódigo 100% Correto!" +

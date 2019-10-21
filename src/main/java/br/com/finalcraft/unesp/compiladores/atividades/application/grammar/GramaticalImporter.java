@@ -3,6 +3,7 @@ package br.com.finalcraft.unesp.compiladores.atividades.application.grammar;
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.Derivation;
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.NaoTerminal;
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.Terminal;
+import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.Tratamento;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.view.imported.PascalKeywordsAsync;
 
 import java.io.*;
@@ -62,7 +63,10 @@ public class GramaticalImporter {
 
                     if (derivationElement.equals("VAZIO")) continue;
 
-                    if (derivationElement.startsWith("<") && derivationElement.endsWith(">") && !derivationElement.contentEquals("<>")){
+                    if (derivationElement.startsWith("{") && derivationElement.endsWith("}")){
+                        derivation = new Tratamento(derivationElement);
+                        System.out.println("\t\tDerivation["+ j + "] Tratamento(" + derivationElement + ")");
+                    }else if (derivationElement.startsWith("<") && derivationElement.endsWith(">") && !derivationElement.contentEquals("<>")){
                         derivation = new NaoTerminal(derivationElement);
                         Grammar.getOrCreateGrammar((NaoTerminal) derivation);    //Garantir que esse simbolo terminal fique salvo na lista de gramáticas para futuras checagens e validações
                         System.out.println("\t\tDerivation["+ j + "] NonTerminal(" + derivationElement + ")");

@@ -2,10 +2,7 @@ package br.com.finalcraft.unesp.compiladores.atividades.application;
 
 
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.Grammar;
-import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.Derivation;
-import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.GrammarError;
-import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.NaoTerminal;
-import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.Terminal;
+import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.*;
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.history.HistoryLog;
 import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.Lexema;
 import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.LexemaType;
@@ -72,15 +69,14 @@ public class AnalisadorSintatico {
         }
     }
 
-
     public static HistoryLog getTopError(){
         Collections.sort(errorTrackerLogs);//Ordena do menor para o Maior
         Collections.reverse(errorTrackerLogs);//Inverte a ordem, pois quero do maior para o menor.
         return errorTrackerLogs.size() > 0 ? errorTrackerLogs.get(0) : null;
     }
 
+    private static boolean debug = true;
 
-    private static boolean debug = false;
     private static void debug(String msg){
         if (debug) System.out.println(msg);
     }
@@ -128,6 +124,25 @@ public class AnalisadorSintatico {
 
         for (HistoryLog derivativeHistoryLog : derivativeHistoryLogs) {
 
+
+            if (derivativeHistoryLog.getNextDerivation() instanceof Tratamento){
+                Tratamento tratamento = (Tratamento) derivativeHistoryLog.getNextDerivation();
+
+                switch (tratamento.getAction()) {
+                    case JUMP_TO:
+                        if (jumpLexemasUntil(tratamento.getTargetLexema())){
+                            debug("JUMPING FROM [" + derivativeHistoryLog.getStateIndex() + "] TO [" + index + "] seeaking for: " + tratamento.getTargetLexema());
+                            derivativeHistoryLog.consumeTerminalDerivation();//Jump_to turns into first derivation
+                            derivativeHistoryLog.updateIndex(index);
+                        }else {
+                            continue;
+                        }
+                        break;
+                    case BUGED_ACTION:
+                        continue;
+                }
+            }
+
             HistoryLog resultantHistoryLog = checkGrammmarMark2(derivativeHistoryLog);
 
             if (resultantHistoryLog.isErrored()){
@@ -143,6 +158,16 @@ public class AnalisadorSintatico {
         return checkGrammmarMark2(currentHistoryLog);
     }
 
+    private static boolean jumpLexemasUntil(LexemaTypeEnum lexemaTypeEnum){
+        for (int i = index; i < todosLexemas.size(); i++) {
+            if (todosLexemas.get(i).getLexemaType() == lexemaTypeEnum){
+                index = i;
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static void ignoreAllLexemasUntilNextSemiColum(){
         for (int i = index; i < todosLexemas.size(); i++) {
             if (todosLexemas.get(i).getLexemaType() == LexemaType.PONTO_E_VIRGULA){
@@ -156,83 +181,4 @@ public class AnalisadorSintatico {
         if (index >= tamanhoLexemas) return null;
         return todosLexemas.get(index);
     }
-
-    private static HistoryLog startingGrammar(){
-        return new HistoryLog();
-    }
-
-    //OLD VERSION
-    /*
-    private static List<GrammarError> checkGrammmar(Grammar grammar){
-
-        HistoryLog historyLog = startingGrammar();          // Seta o grammarStartIndex para caso de errado alguma derivação
-
-        List<GrammarError> grammarErrorList = new ArrayList<GrammarError>();
-
-        System.out.println("\n\nCheking Grammar [" + grammar.getOrigem() + "]");
-
-        int iteration = 0;
-        boolean checkNextList = true;
-        for (List<Derivation> derivationList : grammar.getDerivacao2DList()) {
-            if (checkNextList == false){
-                break;
-            }
-            grammarErrorList.clear();
-            iteration++;
-            if (iteration > 1){//Restaura a historyLog, caso esteja na segunda iteração já vai ser necessário
-                historyLog.restoreMachineState();
-            }
-
-            String derivacaoListString = derivationList.stream().map(Object::toString)
-                    .collect(Collectors.joining("\'\n        - \'"));
-
-            System.out.println("\n    DerivationList [" + iteration +"]: \n        - \'" + derivacaoListString + "\'");
-
-            boolean forceNextCheck = false;
-            for (Derivation derivation : derivationList) {
-
-                System.out.println("\n        CurrentDerivation [" + grammar.getOrigem() + "] \'" + derivation + "\'");
-
-                if (derivation instanceof Terminal){
-                    final Lexema currentLexema = getCurrentLexema();
-                    if (currentLexema == null) {
-                        forceNextCheck = true;
-                        System.out.println("            CurrenteLexema is The End of File, backtracking");
-                        break;
-                    }
-                    final Terminal terminalDerivation = (Terminal) derivation;
-                    System.out.println("            CurrenteLexema is Terminal: " + currentLexema);
-                    if (currentLexema.getLexemaType() != terminalDerivation.getLexemaType()){
-                        System.out.println("                ✖✖✖✖ Fail to match, backtracking!");
-                        //  grammarErrorList.add(new GrammarError(currentLexema,terminalDerivation.getLexemaType()));
-                        forceNextCheck = true;
-                        break;
-                    }
-                    System.out.println("                ✔✔✔✔ Succes match, consuming it!");
-                }else { //Não Terminal
-                    final NaoTerminal nonTerminalDerivation = (NaoTerminal) derivation;
-                    System.out.println("            NonTherminalDerivation [ " + nonTerminalDerivation + " ], here we go again!");
-                    List<GrammarError> innerErrors = checkGrammmar(nonTerminalDerivation.getOwnGrammar());
-                    if (innerErrors.size() > 0){
-                        forceNextCheck = true;
-                        break;
-                    }
-                }
-            }
-            checkNextList = forceNextCheck;
-        }
-
-        if (grammarErrorList.size() > 0){
-            System.out.println("\n");
-            for (GrammarError grammarError : grammarErrorList) {
-                System.out.println(grammarError);
-            }
-        }else {
-            System.out.println("Nenhum erro encontrado na gramatica: " + grammar.getOrigem());
-        }
-
-
-        return grammarErrorList;
-    }
-    */
 }
