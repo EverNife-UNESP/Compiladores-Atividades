@@ -1,8 +1,25 @@
 ☢1.0		<programa> ::=
-				[program] <identificador>
-				[;]
+				<pterminal_program>
+				<identificador>
+				<pterminal_;>
 				<bloco>
-				.
+				<pterminal_.>
+
+☢1.0		<pterminal_program> ::=
+				program
+☢1.0		<pterminal_program> ::=
+                {inplace_replace_program}
+
+☢1.0		<pterminal_;> ::=
+                ;
+☢1.0		<pterminal_;> ::=
+                {inplace_replace_;}
+
+☢1.0		<pterminal_.> ::=
+                .
+☢1.0		<pterminal_.> ::=
+                {inplace_replace_.}
+
 
 
 ☢2.0		<bloco> ::=
@@ -12,55 +29,44 @@
 
 
 ☢3.0		<parte_de_declarações_de_variáveis> ::=
-			VAZIO
-
-☢3.0		<parte_de_declarações_de_variáveis> ::=
 			<declaração_de_variáveis>
-			[;]
+			;
 			<parte_de_declarações_de_variáveis>
 
-
-
-
-☢4.0		<declaração_de_variáveis> ::=
-			<dv_tipo>
-			<lista_de_identificadores>
-
-☢4.0		<declaração_de_variáveis> ::=
-            {jump_to_;}
-
-
-
-☢5.0		<lista_de_identificadores> ::=
-			<identificador>
-			[,]
-			<lista_de_identificadores>
-
-☢5.0		<lista_de_identificadores> ::=
-			<identificador>
-
-
-☢6.0		<parte_de_declarações_de_subrotinas> ::=
+☢3.0		<parte_de_declarações_de_variáveis> ::=
 			VAZIO
+
+
+☢4.0		<declaração_de_variáveis> ::=
+			<tipo>
+			<lista_de_identificadores>
+
+
+☢5.0		<lista_de_identificadores> ::=
+			<identificador>
+			,
+			<lista_de_identificadores>
+
+☢5.0		<lista_de_identificadores> ::=
+			<identificador>
+
 
 ☢6.0		<parte_de_declarações_de_subrotinas> ::=
 			<declaração_de_procedimento>
 			;
 			<parte_de_declarações_de_subrotinas>
 
-
+☢6.0		<parte_de_declarações_de_subrotinas> ::=
+			VAZIO
 
 
 ☢7.0		<declaração_de_procedimento> ::=
-			[procedure]
+			procedure
 			<identificador>
 			<parâmetros_formais>
 			;
 			<bloco>
 
-
-☢8.5		<parâmetros_formais> ::=
-			VAZIO
 
 ☢8.0		<parâmetros_formais> ::=
 			(
@@ -68,7 +74,8 @@
 			)
 			
 			
-
+☢8.5		<parâmetros_formais> ::=
+			VAZIO
 
 
 
@@ -76,25 +83,20 @@
 			<possible_var>
 			<lista_de_identificadores>
 			:
-			<spf_tipo>
+			<tipo_seção_de_parâmetros_formais>
 			<possible_next_seção_de_parâmetros_formais>		
-
-
-☢9.5		<possible_next_seção_de_parâmetros_formais> ::=
-			VAZIO
-
+			
 ☢9.5		<possible_next_seção_de_parâmetros_formais> ::=
 			;
 			<seção_de_parâmetros_formais>
 			
-
-
-☢9.5		<possible_var> ::=
+☢9.5		<possible_next_seção_de_parâmetros_formais> ::=
 			VAZIO
 
 ☢9.5		<possible_var> ::=
 			var
-
+☢9.5		<possible_var> ::=
+			VAZIO
 
 
 ☢10.0	<comando_composto> ::=
@@ -108,9 +110,19 @@
 			VAZIO
 
 ☢10.5	<comando_composto_interior> ::=
-			;
+			<cci_ponto_virgula>
 			<comando>
 			<comando_composto_interior>
+
+☢10.5	<cci_ponto_virgula> ::=
+            ;
+☢10.5	<cci_ponto_virgula> ::=
+            {inplace_replace_;}
+
+
+
+
+
 
 ☢11.0	<comando> ::= <atribuição>
 ☢11.0	<comando> ::= <chamada_de_procedimento>
@@ -138,13 +150,11 @@
 ☢14.0	<comando_condicional_um> ::=
 			if <expressão> then <comando> <comando_condicional_um_else>
 			
-
-☢14.5	<comando_condicional_um_else> ::=
-			VAZIO
-
+			
 ☢14.5	<comando_condicional_um_else> ::=
 			else <comando>
-
+☢14.5	<comando_condicional_um_else> ::=
+			VAZIO
 
 
 ☢15.0	<comando_repetitivo_um> ::=
@@ -155,12 +165,10 @@
 			<expressão_simples> <relacao_expressão>
 
 ☢16.0	<relacao_expressão> ::=
-			VAZIO
-
-☢16.0	<relacao_expressão> ::=
 			<relação> <expressão_simples>
 
-
+☢16.0	<relacao_expressão> ::=
+			VAZIO
 
 
 ☢17.0	<relação> ::= =
@@ -177,17 +185,15 @@
 			<termo>
 			<termo_opcional>
 
-☢18.5	<mais_ou_menos> ::= VAZIO
 ☢18.5	<mais_ou_menos> ::= +
 ☢18.5	<mais_ou_menos> ::= -
+☢18.5	<mais_ou_menos> ::= VAZIO
 
-
-☢18.5	<termo_opcional> ::=
-			VAZIO
 ☢18.5	<termo_opcional> ::=
 			<mais_ou_menos_ou_or>
 			<termo>
-
+☢18.5	<termo_opcional> ::=
+			VAZIO
 
 ☢18.5	<mais_ou_menos_ou_or> ::= +
 ☢18.5	<mais_ou_menos_ou_or> ::= -
@@ -196,9 +202,8 @@
 
 ☢19.0	<termo> ::= <fator> <outro_fator>
 
-☢19.5	<outro_fator> ::= VAZIO
 ☢19.5	<outro_fator> ::= <vezes_ou_dividir_ou_and> <fator> <outro_fator>
-
+☢19.5	<outro_fator> ::= VAZIO
 
 ☢19.5	<vezes_ou_dividir_ou_and> ::= *
 ☢19.5	<vezes_ou_dividir_ou_and> ::= div
@@ -216,23 +221,21 @@
 
 ☢21.0	<variável> ::= <identificador> //<opt_expressão>
 
-☢21.0	<opt_expressão> ::= VAZIO
 ☢21.0	<opt_expressão> ::= <expressão>
-
+☢21.0	<opt_expressão> ::= VAZIO
 
 ☢22.0	<lista_de_expressões> ::= <expressão> <outra_expressão>
 
-☢22.5	<outra_expressão> ::= VAZIO
 ☢22.5	<outra_expressão> ::= , <expressão>
+☢22.5	<outra_expressão> ::= VAZIO
 
+☢23 	<tipo> ::= int
+☢23 	<tipo> ::= boolean
+☢23 	<tipo> ::= {jump_to_identificador}
 
-☢23 	<dv_tipo> ::= int
-☢23 	<dv_tipo> ::= boolean
-☢23 	<dv_tipo> ::= {jump_to_identificador}
-
-☢23 	<spf_tipo> ::= int
-☢23 	<spf_tipo> ::= boolean
-☢23 	<spf_tipo> ::= {jump_to_)}
+☢23 	<tipo_seção_de_parâmetros_formais> ::= int
+☢23 	<tipo_seção_de_parâmetros_formais> ::= boolean
+☢23 	<tipo_seção_de_parâmetros_formais> ::= {jump_to_)}
 
 
 

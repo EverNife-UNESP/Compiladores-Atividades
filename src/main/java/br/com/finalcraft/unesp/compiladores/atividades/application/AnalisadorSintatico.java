@@ -11,7 +11,6 @@ import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.Lexema
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class AnalisadorSintatico {
 
@@ -37,18 +36,14 @@ public class AnalisadorSintatico {
 
         HistoryLog currentHistoryLog = checkGrammmarMark2(new HistoryLog().createNewLogsFor(GRAMMAR_PROGRAM)[0]);
 
-        System.out.println("FullyMatch????:  " + currentHistoryLog.isFullyMach());
-        System.out.println("FullyMatch????:  " + currentHistoryLog.isFullyMach());
-        System.out.println("FullyMatch????:  " + currentHistoryLog.isFullyMach());
-        System.out.println("FullyMatch????:  " + currentHistoryLog.isFullyMach());
-
         HistoryLog topErrorHistoryLog = getTopError();
 
         currentHistoryLog = currentHistoryLog.isFullyMach() ? currentHistoryLog : topErrorHistoryLog;
-        printHistoryLog(currentHistoryLog);
+        if (!debug) printHistoryLog(currentHistoryLog);
         if (currentHistoryLog.isErrored()){
             System.out.println("!!!Errored LOG!!!");
         }
+
         return currentHistoryLog;
     }
 
@@ -75,7 +70,7 @@ public class AnalisadorSintatico {
         return errorTrackerLogs.size() > 0 ? errorTrackerLogs.get(0) : null;
     }
 
-    private static boolean debug = true;
+    private static boolean debug = false;
 
     private static void debug(String msg){
         if (debug) System.out.println(msg);
@@ -125,21 +120,39 @@ public class AnalisadorSintatico {
         for (HistoryLog derivativeHistoryLog : derivativeHistoryLogs) {
 
 
-            if (derivativeHistoryLog.getNextDerivation() instanceof Tratamento){
+            while (derivativeHistoryLog.getNextDerivation() instanceof Tratamento){
+                derivativeHistoryLog = derivativeHistoryLog.createNewDerivationWithoutCurrentMove();
+                derivativeHistoryLog.restoreMachineState();
                 Tratamento tratamento = (Tratamento) derivativeHistoryLog.getNextDerivation();
+
+                derivativeHistoryLog.consumeTerminalDerivation();//first derivation
 
                 switch (tratamento.getAction()) {
                     case JUMP_TO:
                         if (jumpLexemasUntil(tratamento.getTargetLexema())){
                             debug("JUMPING FROM [" + derivativeHistoryLog.getStateIndex() + "] TO [" + index + "] seeaking for: " + tratamento.getTargetLexema());
-                            derivativeHistoryLog.consumeTerminalDerivation();//Jump_to turns into first derivation
                             derivativeHistoryLog.updateIndex(index);
-                        }else {
-                            continue;
+                            derivativeHistoryLog.setError(new GrammarErrorFixed(currentLexema,derivationGrammar, GrammarError.ErrorType.NO_UNTERNIMAL_MATCH,tratamento));
+                            derivativeHistoryLog = derivativeHistoryLog.createNewDerivation();
                         }
                         break;
+                    case FALLBACK_TO:
+                        if (backLexemasUntil(tratamento.getTargetLexema())){
+                            debug("FALLINBACK FROM [" + derivativeHistoryLog.getStateIndex() + "] TO [" + index + "] seeaking for: " + tratamento.getTargetLexema());
+                            derivativeHistoryLog.updateIndex(index);
+                            derivativeHistoryLog.setError(new GrammarErrorFixed(currentLexema,derivationGrammar, GrammarError.ErrorType.NO_UNTERNIMAL_MATCH,tratamento));
+                            derivativeHistoryLog = derivativeHistoryLog.createNewDerivation();
+                        }
+                        break;
+                    case INPLACE_REPLACE:
+                        debug("INPLACE_REPLACE [" + derivativeHistoryLog.getStateIndex() + "] with : " + tratamento.getTargetLexema());
+                        derivativeHistoryLog.setError(new GrammarErrorFixed(currentLexema,derivationGrammar, GrammarError.ErrorType.NO_UNTERNIMAL_MATCH,tratamento));
+                        derivativeHistoryLog = derivativeHistoryLog.createNewDerivation();
+                        break;
+                    case PLACE_AFTER:
+                        break;
                     case BUGED_ACTION:
-                        continue;
+                        break;
                 }
             }
 
@@ -168,6 +181,17 @@ public class AnalisadorSintatico {
         return false;
     }
 
+    private static boolean backLexemasUntil(LexemaTypeEnum lexemaTypeEnum){
+        for (int i = index; i > 0; i--) {
+            if (todosLexemas.get(i).getLexemaType() == lexemaTypeEnum){
+                index = i;
+                System.out.println("backLexemasUntil was succes " + lexemaTypeEnum);
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static void ignoreAllLexemasUntilNextSemiColum(){
         for (int i = index; i < todosLexemas.size(); i++) {
             if (todosLexemas.get(i).getLexemaType() == LexemaType.PONTO_E_VIRGULA){
@@ -180,5 +204,10 @@ public class AnalisadorSintatico {
     private static Lexema getCurrentLexema(){
         if (index >= tamanhoLexemas) return null;
         return todosLexemas.get(index);
+    }
+
+    private static Lexema getNextLexema(){
+        if (index+1 >= tamanhoLexemas) return null;
+        return todosLexemas.get(index+1);
     }
 }

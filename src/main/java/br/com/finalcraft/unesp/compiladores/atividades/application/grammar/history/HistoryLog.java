@@ -4,6 +4,7 @@ import br.com.finalcraft.unesp.compiladores.atividades.application.AnalisadorSin
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.Grammar;
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.Derivation;
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.GrammarError;
+import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.GrammarErrorFixed;
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.Terminal;
 import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.Lexema;
 
@@ -35,6 +36,27 @@ public class HistoryLog implements Comparable<HistoryLog>{
         return newHistoryLogs;
     }
 
+    public HistoryLog createPerfectNewDerivation(){
+        HistoryLog newHistoryLog = this.clone();
+        newHistoryLog.setError(this.getError());
+        newHistoryLog.getPreviousLogs().add(this);
+        return newHistoryLog;
+    }
+
+    public HistoryLog createNewDerivation(){
+        HistoryLog newHistoryLog = this.clone();
+        newHistoryLog.setError(null);
+        newHistoryLog.getPreviousLogs().add(this);
+        return newHistoryLog;
+    }
+
+    public HistoryLog createNewDerivationWithoutCurrentMove(){
+        HistoryLog newHistoryLog = this.clone();
+        newHistoryLog.setError(null);
+        newHistoryLog.setCurrentMove(null);
+        newHistoryLog.getPreviousLogs().add(this);
+        return newHistoryLog;
+    }
 
 
     private HistoryLog createWithNewDerivations(List<Derivation> derivationListToADD){
@@ -55,6 +77,13 @@ public class HistoryLog implements Comparable<HistoryLog>{
             newHistoryLog.neededDerivations.add(0,derivationListToADD.get(i));
         }
         return newHistoryLog;
+    }
+
+    public HistoryLog getFather(int degre){
+        if (degre >= this.getPreviousLogs().size()){
+            return null;
+        }
+        return this.getPreviousLogs().get(this.getPreviousLogs().size() - degre);
     }
 
     public boolean hasNextDerivation(){
@@ -91,14 +120,17 @@ public class HistoryLog implements Comparable<HistoryLog>{
         }
 
         if (terminalDerivation == null
-                || currentLexema.getLexemaType()
-                !=
-                terminalDerivation.getLexemaType()){
+                || currentLexema.getLexemaType() != terminalDerivation.getLexemaType()){
+
             newHistoryLog.grammarError =  new GrammarError(currentLexema,terminalDerivation.getLexemaType(), GrammarError.ErrorType.NO_TERMINAL_MATCH);
             return newHistoryLog;
         }
 
         return newHistoryLog;
+    }
+
+    public void setCurrentMove(HistoryMove historyMove){
+        this.currentMove = historyMove;
     }
 
 
@@ -112,7 +144,7 @@ public class HistoryLog implements Comparable<HistoryLog>{
         newHistoryLog.previousLogs.addAll(this.previousLogs);
         newHistoryLog.neededDerivations.addAll(this.neededDerivations);
 
-        newHistoryLog.currentMove = this.currentMove;
+        newHistoryLog.currentMove = this.currentMove != null ? this.currentMove.clone() : null;
         return newHistoryLog;
     }
 
@@ -125,7 +157,11 @@ public class HistoryLog implements Comparable<HistoryLog>{
     }
 
     public boolean isErrored(){
-        return this.grammarError != null;
+        return this.grammarError != null && !(this.grammarError instanceof GrammarErrorFixed);
+    }
+
+    public boolean isFixed(){
+        return this.grammarError != null && this.grammarError instanceof GrammarErrorFixed;
     }
 
     public HistoryLog setError(GrammarError grammarError){
@@ -157,6 +193,8 @@ public class HistoryLog implements Comparable<HistoryLog>{
         this.stateIndex = newIndex;
     }
 
+
+
     @Override
     public int compareTo(HistoryLog o) {
         return Integer.compare(this.stateIndex,o.stateIndex);
@@ -177,7 +215,7 @@ public class HistoryLog implements Comparable<HistoryLog>{
             stringBuilder.append("\n               - " + neededDerivations.get(i).toString());
         }
 
-        stringBuilder.append("\n\n    CurrentMove: " + currentMove);
+        if (currentMove != null) stringBuilder.append("\n\n    CurrentMove: " + currentMove);
 
         return stringBuilder.toString();
     }

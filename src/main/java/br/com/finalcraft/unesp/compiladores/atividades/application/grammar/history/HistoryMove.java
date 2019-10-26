@@ -30,6 +30,7 @@ public class HistoryMove {
     }
 
     public void setNonTerminalDerivations(List<Derivation> derivations){
+        nonTerminalDerivations.clear();
         nonTerminalDerivations.addAll(derivations);
     }
 
@@ -45,6 +46,10 @@ public class HistoryMove {
             }
             return "Derivating " + naoTerminal + " into : [" + String.join(" ",nonTerminalStringDerivations) + "]";
         }
+    }
+
+    public HistoryMove clone(){
+        return new HistoryMove(this.lexema,this.derivation);
     }
 
     private enum HType {

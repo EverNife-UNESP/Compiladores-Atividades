@@ -3,6 +3,8 @@ package br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analis
 import br.com.finalcraft.unesp.compiladores.atividades.JavaFXMain;
 import br.com.finalcraft.unesp.compiladores.atividades.application.AnalisadorLexico;
 import br.com.finalcraft.unesp.compiladores.atividades.application.AnalisadorSintatico;
+import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.GrammarErrorFixed;
+import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.data.Tratamento;
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.history.HistoryLog;
 import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.Lexema;
 import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.LexemaType;
@@ -131,6 +133,10 @@ public class AnalisadorSintaticoController implements FileLoaderHandler{
     }
 
 
+    private void appendErroSintatico(String text){
+        this.errosSintaticos.setText(errosSintaticos.getText() + text);
+    }
+
     @FXML
     void onAnaliseSintatica() {
 
@@ -139,25 +145,26 @@ public class AnalisadorSintaticoController implements FileLoaderHandler{
             List<Lexema> lexemaList = AnalisadorLexico.analiseLexica(codeArea.getText());
             lexemaObservableList = FXCollections.observableList(lexemaList);
             tabela.setItems(lexemaObservableList);
-            HistoryLog historyLog = AnalisadorSintatico.analiseSintatica(lexemaList);
+            HistoryLog theHistoryLog = AnalisadorSintatico.analiseSintatica(lexemaList);
 
             List<HistoryLog> allHistoryLogs = new ArrayList<HistoryLog>();
-            allHistoryLogs.addAll(historyLog.getPreviousLogs());
-            allHistoryLogs.add(historyLog);
+            allHistoryLogs.addAll(theHistoryLog.getPreviousLogs());
+            allHistoryLogs.add(theHistoryLog);
 
             checkForErroredLexemas();
-
-            for (HistoryLog allHistoryLog : allHistoryLogs) {
-                
+            this.errosSintaticos.setText("");
+            for (HistoryLog historyLog : allHistoryLogs) {
+                if (historyLog.isFixed()){
+                    GrammarErrorFixed  grammarErrorFixed = (GrammarErrorFixed) historyLog.getError();
+                    Tratamento tratamento =  grammarErrorFixed.getTratamento();
+                    appendErroSintatico("\n[" + grammarErrorFixed.getLexema().getId() + "]Erro:" + (tratamento.getGrammar() != null ? tratamento.getGrammar().getOrigem() : "") );
+                }
             }
 
-            if (historyLog.isFullyMach()){
-                this.errosSintaticos.setText("Código 100% Correto!" +
-                        "\nCódigo 100% Correto!" +
-                        "\nCódigo 100% Correto!" +
-                        "\nCódigo 100% Correto!");
+            if (theHistoryLog.isFullyMach()){
+                appendErroSintatico("\n\nCódigo 100% Analisado!");
             }else {
-                this.errosSintaticos.setText("[" + historyLog.getError().getLexema().getId() + "]Erro:" + historyLog.getError().toString());
+                this.errosSintaticos.setText("[" + theHistoryLog.getError().getLexema().getId() + "]Erro:" + theHistoryLog.getError().toString());
             }
         }
 
