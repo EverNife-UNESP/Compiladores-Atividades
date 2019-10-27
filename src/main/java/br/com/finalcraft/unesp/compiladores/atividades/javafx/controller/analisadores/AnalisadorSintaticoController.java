@@ -142,29 +142,34 @@ public class AnalisadorSintaticoController implements FileLoaderHandler{
 
         CodeArea codeArea = PascalKeywordsAsync.getCodeArea();
         if (!codeArea.getText().isEmpty()){
-            List<Lexema> lexemaList = AnalisadorLexico.analiseLexica(codeArea.getText());
-            lexemaObservableList = FXCollections.observableList(lexemaList);
-            tabela.setItems(lexemaObservableList);
-            HistoryLog theHistoryLog = AnalisadorSintatico.analiseSintatica(lexemaList);
+            try {
+                this.errosSintaticos.setText("");
+                List<Lexema> lexemaList = AnalisadorLexico.analiseLexica(codeArea.getText());
+                lexemaObservableList = FXCollections.observableList(lexemaList);
+                tabela.setItems(lexemaObservableList);
+                HistoryLog theHistoryLog = AnalisadorSintatico.analiseSintatica(lexemaList);
 
-            List<HistoryLog> allHistoryLogs = new ArrayList<HistoryLog>();
-            allHistoryLogs.addAll(theHistoryLog.getPreviousLogs());
-            allHistoryLogs.add(theHistoryLog);
+                List<HistoryLog> allHistoryLogs = new ArrayList<HistoryLog>();
+                allHistoryLogs.addAll(theHistoryLog.getPreviousLogs());
+                allHistoryLogs.add(theHistoryLog);
 
-            checkForErroredLexemas();
-            this.errosSintaticos.setText("");
-            for (HistoryLog historyLog : allHistoryLogs) {
-                if (historyLog.isFixed()){
-                    GrammarErrorFixed  grammarErrorFixed = (GrammarErrorFixed) historyLog.getError();
-                    Tratamento tratamento =  grammarErrorFixed.getTratamento();
-                    appendErroSintatico("\n[" + grammarErrorFixed.getLexema().getId() + "]Erro:" + (tratamento.getGrammar() != null ? tratamento.getGrammar().getOrigem() : "") );
+                checkForErroredLexemas();
+                for (HistoryLog historyLog : allHistoryLogs) {
+                    if (historyLog.isFixed()){
+                        GrammarErrorFixed  grammarErrorFixed = (GrammarErrorFixed) historyLog.getError();
+                        Tratamento tratamento =  grammarErrorFixed.getTratamento();
+                        appendErroSintatico("\n[" + grammarErrorFixed.getLexema().getId() + "]Erro:" + (tratamento.getGrammar() != null ? tratamento.getGrammar().getOrigem() : "") );
+                    }
                 }
-            }
 
-            if (theHistoryLog.isFullyMach()){
-                appendErroSintatico("\n\nCódigo 100% Analisado!");
-            }else {
-                this.errosSintaticos.setText("[" + theHistoryLog.getError().getLexema().getId() + "]Erro:" + theHistoryLog.getError().toString());
+                if (theHistoryLog.isFullyMach()){
+                    appendErroSintatico("\n\nCódigo 100% Analisado!");
+                }else {
+                    this.errosSintaticos.setText("[" + theHistoryLog.getError().getLexema().getId() + "]Erro:" + theHistoryLog.getError().toString());
+                }
+            }catch (Exception e){
+                this.appendErroSintatico("FatalError: " + e.getMessage());
+                e.printStackTrace();
             }
         }
 
