@@ -78,11 +78,12 @@ public class Grammar {
                 .addDerivacao(Derivation.valueOf(new Terminal("123")))   //Inteiro
                 .addDerivacao(Derivation.valueOf(new Terminal("1.1")));  //Double
 
-        Grammar IDENTIFICADOR = new Grammar(new NaoTerminal("<identificador>"))
-                .addDerivacao(Derivation.valueOf(new Terminal("qualquerCoisa")));   //Identificador Qualquer
-
         mapOfgrammars.put(new NaoTerminal("<número>").toString(), GRAMAR_NUMERO);
+
+      /*  Grammar IDENTIFICADOR = new Grammar(new NaoTerminal("<identificador>"))
+               .addDerivacao(Derivation.valueOf(new Terminal("qualquerCoisa")));   //Identificador Qualquer
         mapOfgrammars.put(new NaoTerminal("<identificador>").toString(), IDENTIFICADOR);
+          */
     }
 
 }

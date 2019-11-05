@@ -1,5 +1,5 @@
 ☢1.0		<programa> ::=
-				[program] <identificador>
+				[program] [identificador]
 				[;]
 				<bloco>
 				.
@@ -32,13 +32,16 @@
 
 
 ☢5.0		<lista_de_identificadores> ::=
-			<identificador>
+			identificador
+			<outro_identificador>
+
+☢5.0		<outro_identificador> ::=
 			[,]
-			<lista_de_identificadores>
+			identificador
+			<outro_identificador>
 
-☢5.0		<lista_de_identificadores> ::=
-			<identificador>
-
+☢5.0		<outro_identificador> ::=
+            VAZIO
 
 ☢6.0		<parte_de_declarações_de_subrotinas> ::=
 			VAZIO
@@ -53,7 +56,7 @@
 
 ☢7.0		<declaração_de_procedimento> ::=
 			[procedure]
-			<identificador>
+			[identificador]
 			<parâmetros_formais>
 			;
 			<bloco>
@@ -63,11 +66,11 @@
 			VAZIO
 
 ☢8.0		<parâmetros_formais> ::=
-			(
+			[(]
 			<seção_de_parâmetros_formais>
-			)
-			
-			
+			[)]
+
+
 
 
 
@@ -75,9 +78,9 @@
 ☢9.0		<seção_de_parâmetros_formais> ::=
 			<possible_var>
 			<lista_de_identificadores>
-			:
+			[:]
 			<spf_tipo>
-			<possible_next_seção_de_parâmetros_formais>		
+			<possible_next_seção_de_parâmetros_formais>
 
 
 ☢9.5		<possible_next_seção_de_parâmetros_formais> ::=
@@ -86,7 +89,7 @@
 ☢9.5		<possible_next_seção_de_parâmetros_formais> ::=
 			;
 			<seção_de_parâmetros_formais>
-			
+
 
 
 ☢9.5		<possible_var> ::=
@@ -125,18 +128,18 @@
 
 
 ☢13.0	<chamada_de_procedimento> ::=
-			<identificador>
+			identificador
 			(
 			<lista_de_expressões>
 			)
 
 ☢13.0	<chamada_de_procedimento> ::=
-			<identificador>
+			identificador
 
 
 ☢14.0	<comando_condicional_um> ::=
-			if <expressão> then <comando> <comando_condicional_um_else>
-			
+			[if] <expressão> [then] <comando> <comando_condicional_um_else>
+
 
 ☢14.5	<comando_condicional_um_else> ::=
 			VAZIO
@@ -147,7 +150,7 @@
 
 
 ☢15.0	<comando_repetitivo_um> ::=
-			while <expressão> do <comando>
+			[while] <expressão> [do] <comando>
 
 
 ☢16.0	<expressão> ::=
@@ -213,7 +216,7 @@
 ☢20.0	<fator> ::= not <fator>
 
 
-☢21.0	<variável> ::= <identificador> //<opt_expressão>
+☢21.0	<variável> ::= identificador //<opt_expressão>
 
 ☢21.0	<opt_expressão> ::= VAZIO
 ☢21.0	<opt_expressão> ::= <expressão>
@@ -238,7 +241,7 @@
 /*
 
 <número>        |
-<identificador> |
+identificador |
 <variável>      |    -> estes são termináias já adicionadis diretamente no programa devido a sua "natureza dinâmica"
 
 Ta bom já, daqui para baixo não é utilizado.
@@ -246,7 +249,7 @@ Ta bom já, daqui para baixo não é utilizado.
 
 23.0_<número> ::= <dígito> {<dígito>}
 24.0_<dígito> ::= 0_|_1_|_2_|_3_|_4_|_5_|_6_|_7_|_8_|_9
-25.0_<identificador> ::= <letra>_{<letra>_|_<dígito>}
+25.0_identificador ::= <letra>_{<letra>_|_<dígito>}
 26.0_<letra> ::= _|_a_-z_|A_-_Z
 */
 

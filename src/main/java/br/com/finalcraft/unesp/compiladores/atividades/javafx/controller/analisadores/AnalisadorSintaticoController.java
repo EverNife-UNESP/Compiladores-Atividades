@@ -15,10 +15,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
@@ -30,6 +27,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class AnalisadorSintaticoController implements FileLoaderHandler{
     private static AnalisadorSintaticoController instance;
@@ -155,24 +153,32 @@ public class AnalisadorSintaticoController implements FileLoaderHandler{
 
                 checkForErroredLexemas();
                 for (HistoryLog historyLog : allHistoryLogs) {
-                    if (historyLog.isFixed()){
-                        GrammarErrorFixed  grammarErrorFixed = (GrammarErrorFixed) historyLog.getError();
-                        Tratamento tratamento =  grammarErrorFixed.getTratamento();
-                        appendErroSintatico("\n[" + grammarErrorFixed.getLexema().getId() + "]Erro:" + (tratamento.getGrammar() != null ? tratamento.getGrammar().getOrigem() : "") );
+                    if (historyLog.isFixed()) {
+                        GrammarErrorFixed grammarErrorFixed = (GrammarErrorFixed) historyLog.getError();
+                        Tratamento tratamento = grammarErrorFixed.getTratamento();
+                        appendErroSintatico("\n[" + grammarErrorFixed.getLexema().getId() + "]Erro:" + (tratamento.getGrammar() != null ? tratamento.getGrammar().getOrigem() : ""));
                     }
                 }
 
-                if (theHistoryLog.isFullyMach()){
+                if (theHistoryLog.isFullyMach()) {
                     appendErroSintatico("\n\nCódigo 100% Analisado!");
-                }else {
+                } else {
                     this.errosSintaticos.setText("[" + theHistoryLog.getError().getLexema().getId() + "]Erro:" + theHistoryLog.getError().toString());
                 }
-            }catch (Exception e){
-                this.appendErroSintatico("FatalError: " + e.getMessage());
-                e.printStackTrace();
+
+            }catch(Throwable throwable) {
+                showCrashMSG(throwable);
             }
         }
+    }
 
+    private void showCrashMSG(Throwable throwable){
+        this.errosSintaticos.setText("FatalError meu chapa!");
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("O programa crashou meu chapa!");
+        alert.setHeaderText("Infelizmente aconteceu um: " + throwable.getClass().getSimpleName());
+        alert.setContentText(frasesMotivacionais[(new Random().nextInt(frasesMotivacionais.length))]);
+        alert.showAndWait();
     }
 
     public void checkForErroredLexemas(){
@@ -203,4 +209,22 @@ public class AnalisadorSintaticoController implements FileLoaderHandler{
     void onLerArquivo() {
         FileLoaderHandler.openFilerLoader(this);
     }
+
+
+    private static final String[] frasesMotivacionais = new String[]{
+            "Se cair levante se deslizar se segure mas nunca pence em desistir por que o quanto mas amarga for a sua queda mas doce sera a sua vitoria.",
+            "Eu odiava cada minuto dos treinos, mas dizia para mim mesmo: Não desista! Sofra agora e viva o resto de sua vida como um campeão.",
+            "Não desista. Geralmente é a última chave no chaveiro que abre a porta.",
+            "Então não desista, sorria. Você é mais forte do que pensa e será mais feliz do que imagina.",
+            "Tomara que a gente não desista de ser quem é por nada nem ninguém deste mundo.",
+            "Não desista de seu sonho",
+            "Não desista jamais e saiba valorizar quem te ama, esses sim merecem seu respeito.",
+            "Tomara que a gente não desista de ser quem é por nada nem ninguém deste mundo. Que a gente reconheça o poder do outro sem esquecer do nosso.",
+            "Não desista, vá em frente, sempre há uma chance de você tropeçar em algo maravilhoso.",
+            "Não desista só porque as coisas estão difíceis.",
+            "Não desista do amor, não desista de amar, não se entregue à dor, porque ela um dia vai passar...",
+            "-Desista\n" +
+                    "-Não... desista você... de me tentar fazer desistir!!!!",
+            "Mude sua rota, mas não desista no caminho"
+    };
 }
