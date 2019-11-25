@@ -193,7 +193,9 @@ public class HistoryLog implements Comparable<HistoryLog>{
         this.stateIndex = newIndex;
     }
 
-
+    public HistoryMove getCurrentMove() {
+        return currentMove;
+    }
 
     @Override
     public int compareTo(HistoryLog o) {

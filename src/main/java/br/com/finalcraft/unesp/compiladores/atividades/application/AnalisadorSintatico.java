@@ -39,7 +39,7 @@ public class AnalisadorSintatico {
         HistoryLog topErrorHistoryLog = getTopError();
 
         currentHistoryLog = currentHistoryLog.isFullyMach() ? currentHistoryLog : topErrorHistoryLog;
-        if (!debug) printHistoryLog(currentHistoryLog);
+        if (!debug && printHistory) printHistoryLog(currentHistoryLog);
         if (currentHistoryLog.isErrored()){
             System.out.println("!!!Errored LOG!!!");
         }
@@ -71,6 +71,7 @@ public class AnalisadorSintatico {
     }
 
     private static boolean debug = false;
+    private static boolean printHistory = true;
 
     private static void debug(String msg){
         if (debug) System.out.println(msg);
@@ -78,8 +79,18 @@ public class AnalisadorSintatico {
 
     private static HistoryLog checkGrammmarMark2(HistoryLog previousLog){
 
+        class StackOverflow3000 extends RuntimeException{
+            public StackOverflow3000(String message) {
+                super(message);
+            }
+        }
+
         debug(previousLog.toString());
        // errorTrackerLogs.add(previousLog);
+
+        if (previousLog.getPreviousLogs().size() > 3000){
+            throw new StackOverflow3000("StackSize > 2500... probably fatal error, sorry!");
+        }
 
         //Futuro tratamento de error vem aqui.... eu acho, vamo ve no que vai dar o resto...
         if (previousLog.isErrored()){

@@ -11,6 +11,15 @@ public class Lexema {
     private int end;
     private int id = -1;
 
+    public Lexema(Lexema otherLexema) {
+        this.theExpression = otherLexema.theExpression;
+        this.lexemaType = otherLexema.lexemaType;
+        this.linha = otherLexema.linha;
+        this.start = otherLexema.start;
+        this.end = otherLexema.end;
+        this.id = otherLexema.id;
+    }
+
     public Lexema(String theExpression, int linha, int start, int end) {
         this.theExpression = theExpression;
         this.lexemaType = LexemaType.getOf(theExpression);
