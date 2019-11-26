@@ -19,7 +19,7 @@ public class InterpretadorDeCodigo {
     public static List<Double> variables = new ArrayList<>();
     public static Stack<Double> pilhaDados = new Stack<>();
 
-    public static void interpretar(List<Instruction> instructionList){
+    public static synchronized void interpretar(List<Instruction> instructionList){
 
 
         System.out.println("Interpretando código: ");

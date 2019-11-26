@@ -93,8 +93,8 @@ public class InterpretadorDeCodigoController implements FileLoaderHandler{
             try {
                 this.console.setText("");
                 this.outPut.setText("");
-                this.vars.setText("");
-                this.stack.setText("");
+                this.vars.setText("Variáveis: \n");
+                this.stack.setText("Pilha: \n");
 
                 List<Instruction> instructionList = Instruction.fromText(codeArea.getText().replaceAll(CodeInterpreterKeywordsAsync.COMMENT_PATTERN,""));
                 InterpretadorDeCodigo.interpretar(instructionList);
@@ -103,8 +103,10 @@ public class InterpretadorDeCodigoController implements FileLoaderHandler{
                     this.vars.setText(this.vars.getText() + "\n[" + i + "] == " + InterpretadorDeCodigo.variables.get(i));
                 }
 
-                for (int i = InterpretadorDeCodigo.pilhaDados.size() - 1; i >= 0; i--) {
-                    this.stack.setText(this.vars.getText() + "\n[" + i + "] == " + InterpretadorDeCodigo.pilhaDados.get(i));
+                int i = InterpretadorDeCodigo.pilhaDados.size();
+                while (!InterpretadorDeCodigo.pilhaDados.isEmpty()){
+                    this.stack.setText(this.stack.getText() + "\n[" + i + "] == " + InterpretadorDeCodigo.pilhaDados.pop());
+                    i--;
                 }
 
             }catch(Throwable throwable) {
