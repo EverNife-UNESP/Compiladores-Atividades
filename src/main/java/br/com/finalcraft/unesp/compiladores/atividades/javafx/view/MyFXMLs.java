@@ -11,9 +11,12 @@ public class MyFXMLs {
 
     //Atividades
     public static Parent calculadora;
+
     public static Parent analisador_lexico;
     public static Parent analisador_sintatico;
     public static Parent analisador_semantico;
+
+    public static Parent interpretador_codigo;
 
 
     //Arquivos
@@ -27,6 +30,8 @@ public class MyFXMLs {
         analisador_lexico = FXMLLoader.load(MyFXMLs.class.getResource("/assets/atividade2/analisador_lexico.fxml"));
         analisador_sintatico = FXMLLoader.load(MyFXMLs.class.getResource("/assets/atividade2/analisador_sintatico.fxml"));
         analisador_semantico = FXMLLoader.load(MyFXMLs.class.getResource("/assets/atividade2/analisador_semantico.fxml"));
+
+        interpretador_codigo = FXMLLoader.load(MyFXMLs.class.getResource("/assets/atividade3/interpretador_codigo.fxml"));
 
         //save_to_file = FXMLLoader.load(MyFXMLs.class.getResource("/assets/file/save_to_file.fxml"));
     }

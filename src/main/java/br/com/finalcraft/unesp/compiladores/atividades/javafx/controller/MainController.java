@@ -1,9 +1,9 @@
 package br.com.finalcraft.unesp.compiladores.atividades.javafx.controller;
 
-import br.com.finalcraft.unesp.compiladores.atividades.application.AnalisadorSemantico;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analisadores.AnalisadorLexicoController;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analisadores.AnalisadorSemanticoController;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analisadores.AnalisadorSintaticoController;
+import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analisadores.InterpretadorDeCodigoController;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.atividade1.CalculadoraController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,6 +39,6 @@ public class MainController {
 
     @FXML
     void onLerCodigo(){
-        AnalisadorSemanticoController.show();
+        InterpretadorDeCodigoController.show();
     }
 }
