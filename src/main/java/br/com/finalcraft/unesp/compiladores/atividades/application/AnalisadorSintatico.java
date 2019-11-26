@@ -71,7 +71,7 @@ public class AnalisadorSintatico {
     }
 
     private static boolean debug = false;
-    private static boolean printHistory = true;
+    private static boolean printHistory = false;
 
     private static void debug(String msg){
         if (debug) System.out.println(msg);

@@ -1,6 +1,7 @@
 package br.com.finalcraft.unesp.compiladores.atividades;
 
 import br.com.finalcraft.unesp.compiladores.atividades.application.AnalisadorSintatico;
+import br.com.finalcraft.unesp.compiladores.atividades.application.gambiarra.MathCalculator;
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.GramaticalImporter;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analisadores.AnalisadorLexicoController;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analisadores.AnalisadorSemanticoController;
@@ -42,6 +43,7 @@ public class JavaFXMain extends Application {
         AnalisadorLexicoController.setUp();
         AnalisadorSintaticoController.setUp();
         AnalisadorSemanticoController.setUp();
+        MathCalculator.assyncStart();
 
     }
 

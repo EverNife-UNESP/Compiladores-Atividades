@@ -10,7 +10,6 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="codeBorderPanel" prefHeight="609.0" prefWidth="769.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.analisadores.AnalisadorSemanticoController">
    <bottom>
@@ -40,7 +39,7 @@
       </VBox>
    </bottom>
    <right>
-      <VBox alignment="TOP_CENTER" prefHeight="340.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" prefHeight="340.0" prefWidth="383.0" BorderPane.alignment="CENTER">
          <children>
             <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#onLerArquivo" opacity="0.91" prefHeight="71.0" prefWidth="81.0" text="Search File" textFill="#977171">
                <graphic>
@@ -55,10 +54,7 @@
                   <Insets top="20.0" />
                </VBox.margin>
             </Label>
-            <TextArea fx:id="errosSemanticos" editable="false" prefHeight="234.0" prefWidth="200.0" wrapText="true">
-               <font>
-                  <Font size="9.0" />
-               </font></TextArea>
+            <TextArea fx:id="errosSemanticos" editable="false" prefHeight="233.0" prefWidth="391.0" wrapText="true" />
          </children>
       </VBox>
    </right>

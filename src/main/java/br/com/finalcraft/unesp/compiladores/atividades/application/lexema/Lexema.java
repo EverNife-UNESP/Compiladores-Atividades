@@ -4,12 +4,12 @@ import br.com.finalcraft.unesp.compiladores.atividades.application.AnalisadorLex
 
 public class Lexema {
 
-    private String theExpression;
-    private LexemaTypeEnum lexemaType;
-    private int linha;
-    private int start;
-    private int end;
-    private int id = -1;
+    protected String theExpression;
+    protected LexemaTypeEnum lexemaType;
+    protected int linha;
+    protected int start;
+    protected int end;
+    protected int id = -1;
 
     public Lexema(Lexema otherLexema) {
         this.theExpression = otherLexema.theExpression;

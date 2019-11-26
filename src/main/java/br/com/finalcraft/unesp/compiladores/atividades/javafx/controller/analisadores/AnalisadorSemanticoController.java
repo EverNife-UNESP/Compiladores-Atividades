@@ -7,6 +7,7 @@ import br.com.finalcraft.unesp.compiladores.atividades.application.AnalisadorSin
 import br.com.finalcraft.unesp.compiladores.atividades.application.grammar.history.HistoryLog;
 import br.com.finalcraft.unesp.compiladores.atividades.application.lexema.Lexema;
 import br.com.finalcraft.unesp.compiladores.atividades.application.semantic.SemanticElement;
+import br.com.finalcraft.unesp.compiladores.atividades.application.semantic.SemanticError;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.controller.filemanager.FileLoaderHandler;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.view.MyFXMLs;
 import br.com.finalcraft.unesp.compiladores.atividades.javafx.view.imported.PascalKeywordsAsync;
@@ -105,11 +106,11 @@ public class AnalisadorSemanticoController implements FileLoaderHandler{
 
         columnID.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnExpressao.setCellValueFactory(new PropertyValueFactory<>("theExpression"));
-        columnTipoLexema.setCellValueFactory(new PropertyValueFactory<>("lexemaType"));
+        columnTipoLexema.setCellValueFactory(new PropertyValueFactory<>("varType"));
 
         columnEscopo.setCellValueFactory(new PropertyValueFactory<>("escopo"));
         columnValor.setCellValueFactory(new PropertyValueFactory<>("valor"));
-        columnUtiliza.setCellValueFactory(new PropertyValueFactory<>("utiliza"));
+        columnUtiliza.setCellValueFactory(new PropertyValueFactory<>("utilizada"));
 
         columnLinha.setCellValueFactory(new PropertyValueFactory<>("linha"));
         columnInicio.setCellValueFactory(new PropertyValueFactory<>("start"));
@@ -160,9 +161,13 @@ public class AnalisadorSemanticoController implements FileLoaderHandler{
                 tabela.setItems(lexemaObservableList);
 
                 if (theHistoryLog.isFullyMach()) {
-                    appendErroSemantico("\n\nCódigo 100% Analisado!");
+                    appendErroSemantico("\n\nCódigo 100% Analisado!\n\n");
                 } else {
                     this.errosSemanticos.setText("[" + theHistoryLog.getError().getLexema().getId() + "]Erro:" + theHistoryLog.getError().toString());
+                }
+
+                for (SemanticError semanticError : AnalisadorSemantico.semanticErrors) {
+                    appendErroSemantico("\n" + semanticError.toString());
                 }
 
             }catch(Throwable throwable) {
@@ -177,6 +182,7 @@ public class AnalisadorSemanticoController implements FileLoaderHandler{
         alert.setTitle("O programa crashou meu chapa!");
         alert.setHeaderText("Infelizmente aconteceu um: " + throwable.getClass().getSimpleName());
         alert.setContentText(frasesMotivacionais[(new Random().nextInt(frasesMotivacionais.length))]);
+        throwable.printStackTrace();
         alert.showAndWait();
     }
 
